@@ -2,11 +2,11 @@
 Just like the real game... but less!
 
 # Table of Contents
-1. [Game Rules](#game-rules--breakdown)
+1. [Game Rules and Breakdown](#game-rules-and-breakdown)
 2. [Getting Started](#getting-started)
 3. [Helpful Links](#helpful-links)
 
-## Game Rules & Breakdown
+## Game Rules and Breakdown
 
 ## Getting Started
 1. Follow the [MonoGame Visual Studio Development Environment Set-Up](https://monogame.net/articles/getting_started/1_setting_up_your_development_environment_windows/).
