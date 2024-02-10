@@ -1,3 +1,3 @@
 ﻿
-using var game = new Clue_Less.Game1();
+using var game = new Clue_Less.ClueLess();
 game.Run();

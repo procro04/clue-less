@@ -1,15 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Clue_Less.Managers;
+using Clue_Less.Managers.Interfaces;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Runtime.CompilerServices;
 
 namespace Clue_Less
 {
-    public class Game1 : Game
+    public class ClueLess : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public Game1()
+        public ClueLess()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -18,7 +21,19 @@ namespace Clue_Less
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            //This is stupid and I hate it, but MonoGame gonna MonoGame
+            //its DI is whack.
+            TokenManager tokenManager = new TokenManager();
+            BoardManager boardManager = new BoardManager();
+            ValidationManager validationManager = new ValidationManager();
+
+            Services.AddService(typeof(ITokenManager), tokenManager);
+            Services.AddService(typeof(IBoardManager), boardManager);
+            Services.AddService(typeof(IValidationManager), validationManager);
+
+
+            var players = tokenManager.InitializePlayers();
+            var weapons = tokenManager.InitializeWeapons();
 
             base.Initialize();
         }
