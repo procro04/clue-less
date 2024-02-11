@@ -1,9 +1,11 @@
 ﻿using Clue_Less.Managers;
 using Clue_Less.Managers.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework.Media;
+
 
 namespace Clue_Less
 {
@@ -16,11 +18,16 @@ namespace Clue_Less
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = true;            
         }
 
         protected override void Initialize()
         {
+            Song song = Content.Load<Song>("gamesounds/665215__danlucaz__mystery-loop-3"); //Sourced from: https://freesound.org/people/danlucaz/sounds/665215/
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.15f;
+
             //This is stupid and I hate it, but MonoGame gonna MonoGame
             //its DI is whack.
             TokenManager tokenManager = new TokenManager();
@@ -30,7 +37,6 @@ namespace Clue_Less
             Services.AddService(typeof(ITokenManager), tokenManager);
             Services.AddService(typeof(IBoardManager), boardManager);
             Services.AddService(typeof(IValidationManager), validationManager);
-
 
             var players = tokenManager.InitializePlayers();
             var weapons = tokenManager.InitializeWeapons();
@@ -57,6 +63,7 @@ namespace Clue_Less
 
         protected override void Draw(GameTime gameTime)
         {
+            //GUI library: https://github.com/Mezo-hx/MonoGame.ImGuiNet/wiki/SampleImplementation
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here

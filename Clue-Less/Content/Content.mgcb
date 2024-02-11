@@ -13,3 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin gamesounds/665215__danlucaz__mystery-loop-3.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:gamesounds/665215__danlucaz__mystery-loop-3.wav
+
