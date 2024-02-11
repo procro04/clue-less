@@ -1,10 +1,11 @@
 ﻿using Clue_Less.Managers;
 using Clue_Less.Managers.Interfaces;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Models.GameplayObjects;
+using System;
 
 
 namespace Clue_Less
@@ -39,7 +40,19 @@ namespace Clue_Less
             Services.AddService(typeof(IValidationManager), validationManager);
 
             var players = tokenManager.InitializePlayers();
+            System.Diagnostics.Debug.WriteLine("Our suspects");
+            foreach (var player in players)
+            {
+                System.Diagnostics.Debug.WriteLine(player.Name);
+            }
+
             var weapons = tokenManager.InitializeWeapons();
+            System.Diagnostics.Debug.WriteLine("Possible murder weapons");
+            foreach (var weapon in weapons)
+            {
+                System.Diagnostics.Debug.WriteLine(weapon.Name);
+            }
+
 
             base.Initialize();
         }
