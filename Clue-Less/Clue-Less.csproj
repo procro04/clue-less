@@ -11,9 +11,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Content\sprites\**" />
+    <EmbeddedResource Remove="Content\sprites\**" />
+    <None Remove="Content\sprites\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Content\gamesounds\665215__danlucaz__mystery-loop-3.wav" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+    <None Remove="Protos\greet.proto" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\gamesounds\665215__danlucaz__mystery-loop-3.wav">
@@ -25,18 +31,24 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.90.1.1" />
+    <PackageReference Include="Google.Protobuf" Version="3.25.2" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.61.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetworkingService\NetworkingService.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\sprites\" />
+    <ProjectReference Include="..\Clue-Less-Server\Clue-Less-Server.csproj" />
+    <ProjectReference Include="..\MonoGame.ImGuiNet-main\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
+  <ItemGroup>
+	<Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+  </ItemGroup>
 </Project>

@@ -12,12 +12,12 @@ namespace Clue_Less.Managers
         {
             var playerList = new List<Player>
             {
-                new Player { Id = 1, Name = "Mrs. Peacock", TokenId = 1 },
-                new Player { Id = 2, Name = "Professor Plum", TokenId = 2 },
-                new Player { Id = 3, Name = "Miss Scarlet", TokenId = 3 },
-                new Player { Id = 4, Name = "Col. Mustard", TokenId = 4 },
-                new Player { Id = 5, Name = "Mrs. White", TokenId = 5 },
-                new Player { Id = 6, Name = "Mr. Green", TokenId = 6 }
+                new Player { Name = "Mrs. Peacock", TokenId = 1 },
+                new Player { Name = "Professor Plum", TokenId = 2 },
+                new Player { Name = "Miss Scarlet", TokenId = 3 },
+                new Player { Name = "Col. Mustard", TokenId = 4 },
+                new Player { Name = "Mrs. White", TokenId = 5 },
+                new Player { Name = "Mr. Green", TokenId = 6 }
             };
             
             return playerList;

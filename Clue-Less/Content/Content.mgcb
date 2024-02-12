@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin gamesounds/423610__nimlos__rain_thunder_loop.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:gamesounds/423610__nimlos__rain_thunder_loop.mp3
+
 #begin gamesounds/665215__danlucaz__mystery-loop-3.wav
 /importer:WavImporter
 /processor:SongProcessor

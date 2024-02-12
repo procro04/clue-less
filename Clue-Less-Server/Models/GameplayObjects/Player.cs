@@ -1,12 +1,10 @@
 ﻿using Clue_Less.Models.GameplayObjects;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace Models.GameplayObjects
 {
     public class Player
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsCurrentTurn { get; set; } = false;
         public bool IsMakingSuggestion { get; set; } = false;
@@ -18,7 +16,7 @@ namespace Models.GameplayObjects
         public Vector2 PlayerLocation { get; set; }
         public int TokenId { get; set; }
         public bool HasMadeAccusation { get; set; } = false;
-        public string RoomLocatedInId { get; set; }
+        public int RoomLocatedInId { get; set; }
         public List<Card> CardsInHand { get; set; } = new List<Card>();
     }
 }
