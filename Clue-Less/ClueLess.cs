@@ -54,7 +54,8 @@ namespace Clue_Less
                 System.Diagnostics.Debug.WriteLine(weapon.Name);
             }
 
-            // The port number must match the port of the gRPC server.
+            // The port number must match the port of the gRPC server. 
+            // TODO Revisit when hosted on Azure
             using var channel = GrpcChannel.ForAddress("https://localhost:7052");
             var client = new Greeter.GreeterClient(channel);
             var reply = client.SayHello(new HelloRequest { Name = "GreeterClient" });
