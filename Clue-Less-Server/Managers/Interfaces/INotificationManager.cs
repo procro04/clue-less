@@ -1,4 +1,4 @@
-﻿namespace Clue_Less.Managers.Interfaces
+﻿namespace Clue_Less_Server.Managers.Interfaces
 {
     public interface INotificationManager
     {

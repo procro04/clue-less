@@ -1,6 +1,6 @@
-﻿using Clue_Less.Managers.Interfaces;
+﻿using Clue_Less_Server.Managers.Interfaces;
 
-namespace Clue_Less.Managers
+namespace Clue_Less_Server.Managers
 {
     public class NotificationManager : INotificationManager
     {
