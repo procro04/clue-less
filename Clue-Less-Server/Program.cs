@@ -1,3 +1,5 @@
+using Clue_Less_Server.Managers;
+using Clue_Less_Server.Managers.Interfaces;
 using Clue_Less_Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.Services.AddSingleton<IBoardManager, BoardManager>();
+builder.Services.AddSingleton<IValidationManager, ValidationManager>();
+builder.Services.AddSingleton<INotificationManager, NotificationManager>();
 
 var app = builder.Build();
 

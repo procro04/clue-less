@@ -10,8 +10,8 @@ namespace Clue_Less.Managers.Interfaces
 {
     public interface ITokenManager
     {
-        List<Player> InitializePlayers();
-        List<Weapon> InitializeWeapons();
+        List<ClientPlayer> InitializePlayers();
+        List<ClientWeapon> InitializeWeapons();
 
     }
 }

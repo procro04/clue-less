@@ -1,7 +1,6 @@
 ﻿using Clue_Less.Managers;
 using Clue_Less.Managers.Interfaces;
-using Clue_Less_Server;
-using Grpc.Net.Client;
+
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +9,9 @@ using Microsoft.Xna.Framework.Media;
 using MonoGame.ImGuiNet;
 using System;
 using Microsoft.Xna.Framework.Audio;
+using System.Threading.Tasks;
+using Grpc.Net.Client;
+using Clue_Less_Server;
 
 namespace Clue_Less
 {
@@ -20,6 +22,9 @@ namespace Clue_Less
         public static ImGuiRenderer GuiRenderer;
         private bool _toolActive;
         private System.Numerics.Vector4 _colorV4;
+        public Vector2 ballPosition;
+        public Texture2D ballTexture;
+        public float ballSpeed;
 
         public ClueLess()
         {
@@ -34,8 +39,10 @@ namespace Clue_Less
             _toolActive = true;
 
             InitializeMusicAndSound();
-
             GuiRenderer = new ImGuiRenderer(this);
+
+            ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+            ballSpeed = 200f;
 
             TokenManager tokenManager = new TokenManager();
             Services.AddService(typeof(ITokenManager), tokenManager);
@@ -61,15 +68,18 @@ namespace Clue_Less
             var reply = client.SayHello(new HelloRequest { Name = "GreeterClient" });
             System.Diagnostics.Debug.WriteLine("Greetings, Earthling!: " + reply.Message);
 
+            //int location = client.GetPlayerLocation(new Empty()).Response;
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            GuiRenderer.RebuildFontAtlas();
 
             // TODO: use this.Content to load your game content here
-            GuiRenderer.RebuildFontAtlas();
+            ballTexture = Content.Load<Texture2D>("gameobjects/ball");
         }
 
         protected override void Update(GameTime gameTime)
@@ -78,6 +88,43 @@ namespace Clue_Less
                 Exit();
 
             // TODO: Add your update logic here
+            var kstate = Keyboard.GetState();
+            if (kstate.IsKeyDown(Keys.W))
+            {
+                ballPosition.Y -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.S))
+            {
+                ballPosition.Y += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.A))
+            {
+                ballPosition.X -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.D))
+            {
+                ballPosition.X += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (ballPosition.X > _graphics.PreferredBackBufferWidth - ballTexture.Width / 2)
+            {
+                ballPosition.X = _graphics.PreferredBackBufferWidth - ballTexture.Width / 2;
+            }
+            else if (ballPosition.X < ballTexture.Width / 2)
+            {
+                ballPosition.X = ballTexture.Width / 2;
+            }
+            if (ballPosition.Y > _graphics.PreferredBackBufferHeight - ballTexture.Height / 2)
+            {
+                ballPosition.Y = _graphics.PreferredBackBufferHeight - ballTexture.Height / 2;
+            }
+            else if (ballPosition.Y < ballTexture.Height / 2)
+            {
+                ballPosition.Y = ballTexture.Height / 2;
+            }
 
             base.Update(gameTime);
         }
@@ -89,6 +136,11 @@ namespace Clue_Less
             GraphicsDevice.Clear(new Color(_colorV4));
 
             // TODO: Add your drawing code here
+
+            //ball tutorial
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
 

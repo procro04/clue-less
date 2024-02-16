@@ -19,7 +19,6 @@
     <None Remove="Content\gamesounds\665215__danlucaz__mystery-loop-3.wav" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
-    <None Remove="Protos\greet.proto" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\gamesounds\665215__danlucaz__mystery-loop-3.wav">
@@ -41,14 +40,18 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Clue-Less-Server\Clue-Less-Server.csproj" />
     <ProjectReference Include="..\MonoGame.ImGuiNet-main\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\Clue-Less-Server\Protos\greet.proto" GrpcServices="Client">
+      <Link>Protos\greet.proto</Link>
+    </Protobuf>
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
-  <ItemGroup>
-	<Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
-  </ItemGroup>
 </Project>

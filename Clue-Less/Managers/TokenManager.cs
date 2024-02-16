@@ -8,34 +8,34 @@ namespace Clue_Less.Managers
     {
         public TokenManager() { }
 
-        public List<Player> InitializePlayers()
+        public List<ClientPlayer> InitializePlayers()
         {
-            var playerList = new List<Player>
+            var playerList = new List<ClientPlayer>
             {
-                new Player { Name = "Mrs. Peacock", TokenId = 1 },
-                new Player { Name = "Professor Plum", TokenId = 2 },
-                new Player { Name = "Miss Scarlet", TokenId = 3 },
-                new Player { Name = "Col. Mustard", TokenId = 4 },
-                new Player { Name = "Mrs. White", TokenId = 5 },
-                new Player { Name = "Mr. Green", TokenId = 6 }
+                new ClientPlayer { Name = "Mrs. Peacock", TokenId = 1 },
+                new ClientPlayer { Name = "Professor Plum", TokenId = 2 },
+                new ClientPlayer { Name = "Miss Scarlet", TokenId = 3 },
+                new ClientPlayer { Name = "Col. Mustard", TokenId = 4 },
+                new ClientPlayer { Name = "Mrs. White", TokenId = 5 },
+                new ClientPlayer { Name = "Mr. Green", TokenId = 6 }
             };
             
             return playerList;
         }
 
-        public List<Weapon> InitializeWeapons()
+        public List<ClientWeapon> InitializeWeapons()
         {
-            var playerList = new List<Weapon>
+            var weaponList = new List<ClientWeapon>
             {
-                new Weapon { Id = 1, Name = "Candlestick", TokenId = 1 },
-                new Weapon { Id = 2, Name = "Letter Opener", TokenId = 2 },
-                new Weapon { Id = 3, Name = "Revolver", TokenId = 3 },
-                new Weapon { Id = 4, Name = "Lead Pipe", TokenId = 4 },
-                new Weapon { Id = 5, Name = "Wrench", TokenId = 5 },
-                new Weapon { Id = 6, Name = "Rope", TokenId = 6 }
+                new ClientWeapon { Id = 1, Name = "Candlestick", TokenId = 1 },
+                new ClientWeapon { Id = 2, Name = "Letter Opener", TokenId = 2 },
+                new ClientWeapon { Id = 3, Name = "Revolver", TokenId = 3 },
+                new ClientWeapon { Id = 4, Name = "Lead Pipe", TokenId = 4 },
+                new ClientWeapon { Id = 5, Name = "Wrench", TokenId = 5 },
+                new ClientWeapon { Id = 6, Name = "Rope", TokenId = 6 }
             };
 
-            return playerList;
+            return weaponList;
         }
     }
 }
