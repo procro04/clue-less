@@ -25,6 +25,7 @@ namespace Clue_Less
         public Vector2 ballPosition;
         public Texture2D ballTexture;
         public float ballSpeed;
+        protected Texture2D _background;
 
         public ClueLess()
         {
@@ -80,8 +81,8 @@ namespace Clue_Less
 
             // TODO: use this.Content to load your game content here
             ballTexture = Content.Load<Texture2D>("gameobjects/ball");
+            _background = Content.Load<Texture2D>("gameobjects/gameboard");
         }
-
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -139,6 +140,7 @@ namespace Clue_Less
 
             //ball tutorial
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_background, new Vector2(0, 0), Color.White);
             _spriteBatch.Draw(ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
             _spriteBatch.End();
 
