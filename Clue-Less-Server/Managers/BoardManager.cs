@@ -7,9 +7,5 @@ namespace Clue_Less_Server.Managers
     {
         public BoardManager() { }
 
-        public int GetPlayerLocation()
-        {
-            return 1;
-        }
     }
 }

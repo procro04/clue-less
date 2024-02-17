@@ -1,4 +1,3 @@
-using Clue_Less_Server;
 using Clue_Less_Server.Managers;
 using Clue_Less_Server.Managers.Interfaces;
 using Grpc.Core;
@@ -22,10 +21,5 @@ namespace Clue_Less_Server.Services
                 Message = "Hello " + request.Name
             });
         }
-
-        //public override Task<IntegerResponse> GetPlayerLocation()
-        //{
-        //    return Task.FromResult(_boardManager.GetPlayerLocation()).Result;
-        //}
     }
 }

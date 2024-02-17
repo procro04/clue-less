@@ -8,6 +8,5 @@ namespace Clue_Less_Server.Managers.Interfaces
 {
     public interface IBoardManager
     {
-        int GetPlayerLocation();
     }
 }

@@ -8,7 +8,6 @@ package greet;
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
-  rpc GetPlayerLocation(Empty) returns (IntegerResponse);
 }
 
 
@@ -33,10 +32,6 @@ enum PlayerCharacterOptions {
 
 message Empty {
 
-}
-
-message IntegerResponse {
-    int32 response = 1;
 }
 
 
