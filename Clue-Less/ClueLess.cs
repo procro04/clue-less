@@ -1,6 +1,5 @@
 ﻿using Clue_Less.Managers;
 using Clue_Less.Managers.Interfaces;
-
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,9 +8,9 @@ using Microsoft.Xna.Framework.Media;
 using MonoGame.ImGuiNet;
 using System;
 using Microsoft.Xna.Framework.Audio;
-using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Clue_Less_Server;
+
 
 namespace Clue_Less
 {
@@ -47,6 +46,8 @@ namespace Clue_Less
 
             TokenManager tokenManager = new TokenManager();
             Services.AddService(typeof(ITokenManager), tokenManager);
+
+
 
             var players = tokenManager.InitializePlayers();
             System.Diagnostics.Debug.WriteLine("Our suspects");
@@ -147,41 +148,41 @@ namespace Clue_Less
             base.Draw(gameTime);
 
             #region ----------------GUI Tutorial-------------------
-            GuiRenderer.BeginLayout(gameTime);
-            if (_toolActive)
-            {
-                ImGui.Begin("My first tool", ref _toolActive, ImGuiWindowFlags.MenuBar);
-                if (ImGui.BeginMenuBar())
-                {
-                    if (ImGui.BeginMenu("File"))
-                    {
-                        if (ImGui.MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-                        if (ImGui.MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-                        if (ImGui.MenuItem("Close", "Ctrl+W")) { _toolActive = false; }
-                        ImGui.EndMenu();
-                    }
-                }
-                ImGui.EndMenuBar();
-            }
+            //GuiRenderer.BeginLayout(gameTime);
+            //if (_toolActive)
+            //{
+            //    ImGui.Begin("My first tool", ref _toolActive, ImGuiWindowFlags.MenuBar);
+            //    if (ImGui.BeginMenuBar())
+            //    {
+            //        if (ImGui.BeginMenu("File"))
+            //        {
+            //            if (ImGui.MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
+            //            if (ImGui.MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+            //            if (ImGui.MenuItem("Close", "Ctrl+W")) { _toolActive = false; }
+            //            ImGui.EndMenu();
+            //        }
+            //    }
+            //    ImGui.EndMenuBar();
+            //}
 
-            // Edit a color stored as 4 floats
-            ImGui.ColorEdit4("Color", ref _colorV4);
+            //// Edit a color stored as 4 floats
+            //ImGui.ColorEdit4("Color", ref _colorV4);
 
-            // Generate samples and plot them
-            var samples = new float[100];
-            for (var n = 0; n < samples.Length; n++)
-                samples[n] = (float)Math.Sin(n * 0.2f + ImGui.GetTime() * 1.5f);
-            ImGui.PlotLines("Samples", ref samples[0], 100);
+            //// Generate samples and plot them
+            //var samples = new float[100];
+            //for (var n = 0; n < samples.Length; n++)
+            //    samples[n] = (float)Math.Sin(n * 0.2f + ImGui.GetTime() * 1.5f);
+            //ImGui.PlotLines("Samples", ref samples[0], 100);
 
-            // Display contents in a scrolling region
-            ImGui.TextColored(new Vector4(1, 1, 0, 1).ToNumerics(), "Important Stuff");
-            ImGui.BeginChild("Scrolling", new System.Numerics.Vector2(0), ImGuiChildFlags.None);
-            for (var n = 0; n < 50; n++)
-                ImGui.Text($"{n:0000}: Some text");
-            ImGui.EndChild();
+            //// Display contents in a scrolling region
+            //ImGui.TextColored(new Vector4(1, 1, 0, 1).ToNumerics(), "Important Stuff");
+            //ImGui.BeginChild("Scrolling", new System.Numerics.Vector2(0), ImGuiChildFlags.None);
+            //for (var n = 0; n < 50; n++)
+            //    ImGui.Text($"{n:0000}: Some text");
+            //ImGui.EndChild();
 
-            ImGui.End();
-            GuiRenderer.EndLayout();
+            //ImGui.End();
+            //GuiRenderer.EndLayout();
 
             #endregion
         }
