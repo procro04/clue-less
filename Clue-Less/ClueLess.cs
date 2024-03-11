@@ -41,7 +41,7 @@ namespace Clue_Less
         {
             //Globals inits
             Globals.Instance.Game = this;
-            Globals.Instance.Bounds = new(1024, 768);
+            Globals.Instance.Bounds = new(1920, 1080);
             Globals.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.Instance.Content = Content;
 
@@ -98,7 +98,6 @@ namespace Clue_Less
             GuiRenderer.RebuildFontAtlas();
 
             // TODO: use this.Content to load your game content here
-            ClientBoardManager.Instance.Draw();
         }
         protected override void Update(GameTime gameTime)
         {
@@ -131,58 +130,12 @@ namespace Clue_Less
         protected override void Draw(GameTime gameTime)
         {
             //GUI library: https://github.com/Mezo-hx/MonoGame.ImGuiNet/wiki/SampleImplementation
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
-            GraphicsDevice.Clear(new Color(_colorV4));
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-
-            ////ball tutorial
-            //_spriteBatch.Begin();
-            //_spriteBatch.Draw(_background, new Vector2(0, 0), Color.White);
-            ////make a sprite class to encapsulate all this screen position, texture, etc.
-            //_spriteBatch.Draw(ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
-            //_spriteBatch.End();
+            ClientBoardManager.Instance.Draw();
 
             base.Draw(gameTime);
-
-            #region ----------------GUI Tutorial-------------------
-            //GuiRenderer.BeginLayout(gameTime);
-            //if (_toolActive)
-            //{
-            //    ImGui.Begin("My first tool", ref _toolActive, ImGuiWindowFlags.MenuBar);
-            //    if (ImGui.BeginMenuBar())
-            //    {
-            //        if (ImGui.BeginMenu("File"))
-            //        {
-            //            if (ImGui.MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-            //            if (ImGui.MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-            //            if (ImGui.MenuItem("Close", "Ctrl+W")) { _toolActive = false; }
-            //            ImGui.EndMenu();
-            //        }
-            //    }
-            //    ImGui.EndMenuBar();
-            //}
-
-            //// Edit a color stored as 4 floats
-            //ImGui.ColorEdit4("Color", ref _colorV4);
-
-            //// Generate samples and plot them
-            //var samples = new float[100];
-            //for (var n = 0; n < samples.Length; n++)
-            //    samples[n] = (float)Math.Sin(n * 0.2f + ImGui.GetTime() * 1.5f);
-            //ImGui.PlotLines("Samples", ref samples[0], 100);
-
-            //// Display contents in a scrolling region
-            //ImGui.TextColored(new Vector4(1, 1, 0, 1).ToNumerics(), "Important Stuff");
-            //ImGui.BeginChild("Scrolling", new System.Numerics.Vector2(0), ImGuiChildFlags.None);
-            //for (var n = 0; n < 50; n++)
-            //    ImGui.Text($"{n:0000}: Some text");
-            //ImGui.EndChild();
-
-            //ImGui.End();
-            //GuiRenderer.EndLayout();
-
-            #endregion
         }
 
         protected void InitializeMusicAndSound()

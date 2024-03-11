@@ -17,6 +17,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Content\gamesounds\665215__danlucaz__mystery-loop-3.wav" />
+    <None Remove="Content\gametokens\token_10.png" />
+    <None Remove="Content\gametokens\token_5.png" />
+    <None Remove="Content\gametokens\token_6.png" />
+    <None Remove="Content\gametokens\token_7.png" />
+    <None Remove="Content\gametokens\token_8.png" />
+    <None Remove="Content\gametokens\token_9.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>

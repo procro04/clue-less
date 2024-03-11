@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -13,5 +14,7 @@ namespace Models.GameplayObjects
         public string Name { get; set; }
         public int TokenId { get; set; }
         public Vector2 TokenLocation { get; set; }
+        public Texture2D WeaponTexture {get; set; }
+
     }
 }

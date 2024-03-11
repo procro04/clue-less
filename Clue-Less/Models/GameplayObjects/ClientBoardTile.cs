@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Clue_Less.Enums;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Clue_Less.Models.GameplayObjects
@@ -7,11 +8,13 @@ namespace Clue_Less.Models.GameplayObjects
     {
         private readonly Texture2D _texture;
         private readonly Vector2 _position;
+        private readonly TileTypeEnum _tileType;
 
-        public ClientBoardTile(Texture2D texture, Vector2 position)
+        public ClientBoardTile(Texture2D texture, Vector2 position, TileTypeEnum tileType)
         {
             _texture = texture;
             _position = position;
+            _tileType = tileType;
         }   
 
         public void Draw()
