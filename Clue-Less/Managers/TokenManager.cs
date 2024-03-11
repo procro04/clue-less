@@ -1,11 +1,13 @@
-﻿using Clue_Less.Managers.Interfaces;
-using Models.GameplayObjects;
+﻿using Models.GameplayObjects;
+using System;
 using System.Collections.Generic;
 
 namespace Clue_Less.Managers
 {
-    public class TokenManager : ITokenManager
+    public class TokenManager 
     {
+        private static readonly Lazy<TokenManager> lazy = new Lazy<TokenManager>(() => new TokenManager());
+        public static TokenManager Instance { get { return lazy.Value; } }
         public TokenManager() { }
 
         public List<ClientPlayer> InitializePlayers()

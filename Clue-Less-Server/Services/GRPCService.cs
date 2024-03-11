@@ -5,11 +5,11 @@ using Grpc.Core;
 
 namespace Clue_Less_Server.Services
 {
-    public class GreeterService : Greeter.GreeterBase
+    public class GRPCService : Greeter.GreeterBase
     {
-        private readonly ILogger<GreeterService> _logger;
+        private readonly ILogger<GRPCService> _logger;
         private readonly IBoardManager _boardManager;
-        public GreeterService(ILogger<GreeterService> logger)
+        public GRPCService(ILogger<GRPCService> logger)
         {
             _logger = logger;
             _boardManager = new BoardManager();
@@ -23,9 +23,12 @@ namespace Clue_Less_Server.Services
             });
         }
 
-        //public override Task<IntegerResponse> GetPlayerLocation()
-        //{
-        //    return Task.FromResult(_boardManager.GetPlayerLocation()).Result;
-        //}
+        public override Task<PlayerMoveResponse> MovePlayerLocation(PlayerMoveRequest request, ServerCallContext context)
+        {
+            return Task.FromResult(new PlayerMoveResponse
+            {
+                PlayerLocation = BoardManager.Instance.MovePlayer(request.PlayerId, request.MoveToLocation)
+            });
+        }
     }
 }

@@ -9,6 +9,7 @@ service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
   rpc GetPlayerLocation(Empty) returns (IntegerResponse);
+  rpc MovePlayerLocation(PlayerMoveRequest) returns (PlayerMoveResponse);
 }
 
 
@@ -37,6 +38,15 @@ message Empty {
 
 message IntegerResponse {
     int32 response = 1;
+}
+
+message PlayerMoveRequest {
+    int32 playerId = 1;
+    int32 moveToLocation = 2;
+}
+
+message PlayerMoveResponse {
+    int32 playerLocation = 1;
 }
 
 

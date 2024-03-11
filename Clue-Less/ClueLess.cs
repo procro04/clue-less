@@ -1,15 +1,16 @@
 ﻿using Clue_Less.Managers;
-using Clue_Less.Managers.Interfaces;
-using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.ImGuiNet;
-using System;
 using Microsoft.Xna.Framework.Audio;
-using Grpc.Net.Client;
+using Services;
+using System;
+using Managers;
 using Clue_Less_Server;
+using Grpc.Net.Client;
+using System.Diagnostics;
 
 
 namespace Clue_Less
@@ -22,9 +23,12 @@ namespace Clue_Less
         private bool _toolActive;
         private System.Numerics.Vector4 _colorV4;
         public Vector2 ballPosition;
+        public int ballPosition_asPlayer = 0;
         public Texture2D ballTexture;
         public float ballSpeed;
         protected Texture2D _background;
+        private int horizontalPixelOffsetForMovement = 50;
+        private Vector2 startingPosition;
 
         public ClueLess()
         {
@@ -35,6 +39,19 @@ namespace Clue_Less
 
         protected override void Initialize()
         {
+            //Globals inits
+            Globals.Instance.Game = this;
+            Globals.Instance.Bounds = new(1024, 768);
+            Globals.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Globals.Instance.Content = Content;
+
+            _graphics.PreferredBackBufferWidth = Globals.Instance.Bounds.X;
+            _graphics.PreferredBackBufferHeight = Globals.Instance.Bounds.Y;
+            _graphics.ApplyChanges();
+            Window.Title = "Clue-Less: Just like the real game...but less!";
+
+
+            //Determine what to keep and what to get rid of below here
             _colorV4 = Color.CornflowerBlue.ToVector4().ToNumerics();
             _toolActive = true;
 
@@ -42,33 +59,34 @@ namespace Clue_Less
             GuiRenderer = new ImGuiRenderer(this);
 
             ballPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+            startingPosition = ballPosition;
             ballSpeed = 200f;
 
-            TokenManager tokenManager = new TokenManager();
-            Services.AddService(typeof(ITokenManager), tokenManager);
-
-
-
-            var players = tokenManager.InitializePlayers();
-            System.Diagnostics.Debug.WriteLine("Our suspects");
+            Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
+            var players = TokenManager.Instance.InitializePlayers();
+            Debug.WriteLine("Our suspects");
             foreach (var player in players)
             {
-                System.Diagnostics.Debug.WriteLine(player.Name);
+                Debug.WriteLine(player.Name);
             }
+            Debug.WriteLine("\n Ending Token Manager's Instantiation of Suspects/Players \n");
 
-            var weapons = tokenManager.InitializeWeapons();
-            System.Diagnostics.Debug.WriteLine("Possible murder weapons");
+            Debug.WriteLine("Beginning Token Manager's Instantiation of Weapons \n");
+            var weapons = TokenManager.Instance.InitializeWeapons();
+            Debug.WriteLine("Possible murder weapons");
             foreach (var weapon in weapons)
             {
-                System.Diagnostics.Debug.WriteLine(weapon.Name);
+                Debug.WriteLine(weapon.Name);
             }
 
+            Debug.WriteLine("\n End Token Manager's Instantiation of Weapons \n");
             // The port number must match the port of the gRPC server. 
             // TODO Revisit when hosted on Azure
-            using var channel = GrpcChannel.ForAddress("https://localhost:7052");
-            var client = new Greeter.GreeterClient(channel);
-            var reply = client.SayHello(new HelloRequest { Name = "GreeterClient" });
-            System.Diagnostics.Debug.WriteLine("Greetings, Earthling!: " + reply.Message);
+
+            Debug.WriteLine("Beginning gRPC Client instantiation \n");
+            var reply = GRPCService.Instance.SayHello("GreeterClient");
+            Debug.WriteLine("Greetings, Earthling!: " + reply);
+            Debug.WriteLine("End gRPC Client instantiation \n");
 
             //int location = client.GetPlayerLocation(new Empty()).Response;
 
@@ -77,56 +95,35 @@ namespace Clue_Less
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
             GuiRenderer.RebuildFontAtlas();
 
             // TODO: use this.Content to load your game content here
-            ballTexture = Content.Load<Texture2D>("gameobjects/ball");
-            _background = Content.Load<Texture2D>("gameobjects/gameboard");
+            ClientBoardManager.Instance.Draw();
         }
         protected override void Update(GameTime gameTime)
         {
+            Globals.Instance.Update(gameTime);
+
+            //TODO: Determine what is needed under here
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
-            var kstate = Keyboard.GetState();
-            if (kstate.IsKeyDown(Keys.W))
-            {
-                ballPosition.Y -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
 
-            if (kstate.IsKeyDown(Keys.S))
+            //Use monogame events for key presses or rende
+            var kstate = Keyboard.GetState();
+            if (kstate.IsKeyDown(Keys.D))
             {
-                ballPosition.Y += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ballPosition_asPlayer = GRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer + 1);
             }
 
             if (kstate.IsKeyDown(Keys.A))
             {
-                ballPosition.X -= ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ballPosition_asPlayer = GRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer - 1);
             }
 
-            if (kstate.IsKeyDown(Keys.D))
-            {
-                ballPosition.X += ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-
-            if (ballPosition.X > _graphics.PreferredBackBufferWidth - ballTexture.Width / 2)
-            {
-                ballPosition.X = _graphics.PreferredBackBufferWidth - ballTexture.Width / 2;
-            }
-            else if (ballPosition.X < ballTexture.Width / 2)
-            {
-                ballPosition.X = ballTexture.Width / 2;
-            }
-            if (ballPosition.Y > _graphics.PreferredBackBufferHeight - ballTexture.Height / 2)
-            {
-                ballPosition.Y = _graphics.PreferredBackBufferHeight - ballTexture.Height / 2;
-            }
-            else if (ballPosition.Y < ballTexture.Height / 2)
-            {
-                ballPosition.Y = ballTexture.Height / 2;
-            }
+            //this will go in the ball position render logic
+            ballPosition.X = startingPosition.X + (ballPosition_asPlayer * horizontalPixelOffsetForMovement);
 
             base.Update(gameTime);
         }
@@ -139,11 +136,12 @@ namespace Clue_Less
 
             // TODO: Add your drawing code here
 
-            //ball tutorial
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(_background, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
-            _spriteBatch.End();
+            ////ball tutorial
+            //_spriteBatch.Begin();
+            //_spriteBatch.Draw(_background, new Vector2(0, 0), Color.White);
+            ////make a sprite class to encapsulate all this screen position, texture, etc.
+            //_spriteBatch.Draw(ballTexture, ballPosition, null, Color.White, 0f, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), Vector2.One, SpriteEffects.None, 0f);
+            //_spriteBatch.End();
 
             base.Draw(gameTime);
 
