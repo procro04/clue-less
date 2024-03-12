@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clue-Less", "Clue-Less\Clue
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monogame.ImGuiNet", "MonoGame.ImGuiNet-main\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj", "{32CD8C9B-1A94-4281-8248-C1F5A7D31ED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clue-Less-Server", "Clue-Less-Server\Clue-Less-Server.csproj", "{F2F11693-0A2E-415C-B59A-3FED3A1D4CC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clue-Less-Server", "Clue-Less-Server\Clue-Less-Server.csproj", "{F2F11693-0A2E-415C-B59A-3FED3A1D4CC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

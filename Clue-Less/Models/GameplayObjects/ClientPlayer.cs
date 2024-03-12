@@ -1,11 +1,7 @@
-﻿using Clue_Less.Enums;
+﻿using Greet;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Models.GameplayObjects
 {
@@ -13,10 +9,11 @@ namespace Models.GameplayObjects
     {
         public string Name { get; set; }
         public int TokenId { get; set; }
-        public PlayerTokenEnum TokenValue { get; set; }
-        public string ContentUrl { get; set; }
+        public int PlayerId { get; set; }
+        public Location CurrentLocation { get; set; }
+        public PlayerCharacterOptions TokenValue { get; set; }
         public Texture2D Texture { get; set; }
-        public Vector2 Position { get; set; }
+        public Vector2 RenderPosition { get; set; }
     }
 }
 

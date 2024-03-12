@@ -1,11 +1,10 @@
 ﻿using Clue_Less;
-using Clue_Less.Enums;
-using Clue_Less.Managers;
-using Clue_Less.Models.GameplayObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Models.GameplayObjects;
 using System;
 using System.Collections.Generic;
+using Greet;
 
 namespace Managers
 {
@@ -23,6 +22,45 @@ namespace Managers
         {
             //Instantiate all tiles and then draw them.
             InitalizeBoardTiles();
+        }
+
+        //Return true if found at correct location, false otherwise.
+        public bool RemovePlayer(int playerId, Location removeFromLocation)
+        {
+            foreach (var tile in Tiles)
+            {
+                if (tile.TileType == removeFromLocation)
+                {
+                    for (int i = 0; i < tile.TokenSlots.Count; i++)
+                    {
+                        if (tile.TokenSlots[i].PlayerId == playerId)
+                        {
+                            tile.TokenSlots[i].PlayerId = 0;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public Vector2 MovePlayer(int playerId, Location moveToLocation)
+        {
+            foreach(var tile in Tiles)
+            {
+                if(tile.TileType == moveToLocation)
+                {
+                    for(int i = 0; i < tile.TokenSlots.Count; i++)
+                    {
+                        if (tile.TokenSlots[i].PlayerId == 0)
+                        {
+                            tile.TokenSlots[i].PlayerId = playerId;
+                            return tile.TokenSlots[i].RenderPosition;
+                        }
+                    }
+                }
+            }
+            return new Vector2(0.0f, 0.0f);
         }
 
         public void Draw(GameTime gameTime)
@@ -55,41 +93,41 @@ namespace Managers
             var startingPos = new System.Numerics.Vector2(BOARD_PADDING, BOARD_PADDING);
             var currentPos = startingPos;
             //First row of rooms
-            Tiles.Add(new ClientBoardTile(studyTex, currentPos, TileTypeEnum.Study));
+            Tiles.Add(new ClientBoardTile(studyTex, currentPos, Location.Study));
             currentPos.X += studyTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayOne));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(concertHallTex, currentPos, TileTypeEnum.ConcertHall));
+            Tiles.Add(new ClientBoardTile(concertHallTex, currentPos, Location.ConcertHall));
             currentPos.X += concertHallTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayTwo));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(loungeTex, currentPos, TileTypeEnum.Lounge));
+            Tiles.Add(new ClientBoardTile(loungeTex, currentPos, Location.Lounge));
 
             //Second row
             currentPos.Y += hallwayTexVert.Height;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayThree));
             currentPos.X += hallwayTexVert.Width;
             //Skip one spot
             currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayFour));
             currentPos.X += hallwayTexVert.Width;
             //Skip one spot
             currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayFive));
 
             //Third Row
             currentPos.Y += hallwayTexHoriz.Height;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(libraryTex, currentPos, TileTypeEnum.Library));
+            Tiles.Add(new ClientBoardTile(libraryTex, currentPos, Location.Library));
             currentPos.X += libraryTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwaySix));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(billiardTex, currentPos, TileTypeEnum.Billiard));
+            Tiles.Add(new ClientBoardTile(billiardTex, currentPos, Location.Billiard));
             currentPos.X += billiardTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwaySeven));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(diningRoomTex, currentPos, TileTypeEnum.DiningRoom));
+            Tiles.Add(new ClientBoardTile(diningRoomTex, currentPos, Location.DiningRoom));
             currentPos.X += diningRoomTex.Width;
 
             MenuPosition.X = currentPos.X;
@@ -98,29 +136,29 @@ namespace Managers
             currentPos.Y += hallwayTexVert.Height;
             MenuPosition.Y = currentPos.Y;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayEight));
             currentPos.X += hallwayTexVert.Width;
             //Skip one spot
             currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayNine));
             currentPos.X += hallwayTexVert.Width;
             //Skip one spot
             currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayTen));
 
 
             //Fifth Row
             currentPos.Y += hallwayTexHoriz.Height;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(conservatoryTex, currentPos, TileTypeEnum.Conservatory));
+            Tiles.Add(new ClientBoardTile(conservatoryTex, currentPos, Location.Conservatory));
             currentPos.X += conservatoryTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayEleven));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(ballroomTex, currentPos, TileTypeEnum.Ballroom));
+            Tiles.Add(new ClientBoardTile(ballroomTex, currentPos, Location.Ballroom));
             currentPos.X += ballroomTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, TileTypeEnum.Hallway));
+            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayTwelve));
             currentPos.X += hallwayTexHoriz.Width;
-            Tiles.Add(new ClientBoardTile(kitchenTex, currentPos, TileTypeEnum.Kitchen));
+            Tiles.Add(new ClientBoardTile(kitchenTex, currentPos, Location.Kitchen));
             currentPos.X += kitchenTex.Width;
 
             MenuManager.Instance.SetAnchorPosition(MenuPosition);

@@ -1,17 +1,11 @@
-﻿using Clue_Less.Managers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.ImGuiNet;
 using Microsoft.Xna.Framework.Audio;
-using Services;
-using System;
 using Managers;
-using Clue_Less_Server;
-using Grpc.Net.Client;
 using System.Diagnostics;
-using ImGuiNET;
 
 
 namespace Clue_Less
@@ -39,7 +33,7 @@ namespace Clue_Less
         {
             //Globals inits
             Globals.Instance.Game = this;
-            Globals.Instance.Bounds = new(1920, 1080);
+            Globals.Instance.Bounds = new(1720, 980);
             Globals.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.Instance.Content = Content;
 
@@ -72,12 +66,12 @@ namespace Clue_Less
             var kstate = Keyboard.GetState();
             if (kstate.IsKeyDown(Keys.D))
             {
-                ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer + 1);
+                //ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer + 1);
             }
 
             if (kstate.IsKeyDown(Keys.A))
             {
-                ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer - 1);
+                //ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer - 1);
             }
 
             //this will go in the ball position render logic
@@ -94,8 +88,7 @@ namespace Clue_Less
 
             // TODO: Add your drawing code here
             ClientBoardManager.Instance.Draw(gameTime);
-            TokenManager.Instance.DrawWeaponTokens();
-            TokenManager.Instance.DrawWeaponTokens();
+            TokenManager.Instance.Draw(gameTime);            
                         
             base.Draw(gameTime);
             GuiRenderer.EndLayout();

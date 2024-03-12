@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-option csharp_namespace = "Clue_Less_Server";
-
 package greet;
 
 // The greeting service definition.
@@ -34,6 +32,40 @@ enum PlayerCharacterOptions {
     MrGreen = 5;
 }
 
+enum WeaponTokenEnum
+{
+    Candlestick = 0;
+    LetterOpener = 1;
+    Pipe = 2;
+    Revolver = 3;
+    Rope = 4;
+    Wrench = 5;
+}
+
+enum Location {
+	Study = 0;
+    HallwayOne = 1;
+    ConcertHall = 2;
+    HallwayTwo = 3;
+    Lounge = 4;
+    HallwayThree = 5;
+    HallwayFour = 6;
+    HallwayFive = 7;
+    Library = 8;
+    HallwaySix = 9;
+    Billiard = 10;
+    HallwaySeven = 11;
+    DiningRoom = 12;
+    HallwayEight = 13;
+    HallwayNine = 14;
+    HallwayTen = 15;
+    Conservatory = 16;
+    HallwayEleven = 17;
+    Ballroom = 18;
+    HallwayTwelve = 19;
+    Kitchen = 20;
+}
+
 message Empty {
 
 }
@@ -44,11 +76,11 @@ message IntegerResponse {
 
 message PlayerMoveRequest {
     int32 playerId = 1;
-    int32 moveToLocation = 2;
+    Location moveToLocation = 2;
 }
 
 message PlayerMoveResponse {
-    int32 playerLocation = 1;
+    Location playerLocation = 1;
 }
 
 message PlayerActionRequest {

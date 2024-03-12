@@ -22,16 +22,11 @@ namespace Clue_Less_Server.Managers
             return playerPosition; 
         }
         
-        public int MovePlayer(int playerId, int moveToPosition)
+        public Greet.Location MovePlayer(int playerId, Greet.Location moveToPosition)
         {
-            //positive case - can only go to the right by one square, but not off the board.
-            if ((moveToPosition == (playerPosition + 1) && moveToPosition < 3) ||
-                (moveToPosition == playerPosition - 1 && moveToPosition > -1))
-            {
-                //move position is valid
-                playerPosition = moveToPosition;
-            }
-            return playerPosition;
+            //You'll need to write validation code that makes sure this is a valid move, track the player, etc.
+            //for now, we just say yep! Go there.
+            return moveToPosition;
         }
     }
 }

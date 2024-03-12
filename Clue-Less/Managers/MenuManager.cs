@@ -1,20 +1,11 @@
-﻿using Clue_Less.Enums;
-using Clue_Less.Models.GameplayObjects;
-using Clue_Less_Server.Managers;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Microsoft.Xna.Framework;
-using Models.GameplayObjects;
 using Services;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Clue_Less.Managers
+
+namespace Managers
 {
     public class MenuManager
     {
@@ -59,9 +50,9 @@ namespace Clue_Less.Managers
             if (ImGui.Button("Initialize Players"))
             {
                 Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
-                var players = TokenManager.Instance.InitializePlayers();
+                TokenManager.Instance.InitializePlayers();
                 Debug.WriteLine("Our suspects");
-                foreach (var player in players)
+                foreach (var player in TokenManager.Instance.clientPlayers)
                 {
                     Debug.WriteLine(player.Name);
                 }
@@ -71,13 +62,35 @@ namespace Clue_Less.Managers
             if (ImGui.Button("Initialize Weapons"))
             {
                 Debug.WriteLine("Beginning Token Manager's Instantiation of Weapons \n");
-                var weapons = TokenManager.Instance.InitializeWeapons();
+                TokenManager.Instance.InitializeWeapons();
                 Debug.WriteLine("Possible murder weapons");
-                foreach (var weapon in weapons)
+                foreach (var weapon in TokenManager.Instance.clientWeapons)
                 {
                     Debug.WriteLine(weapon.Name);
                 }
                 Debug.WriteLine("End Token Manager's Instantiation of Weapons");
+            }
+
+            ImGui.Text("Move MrsPeacock! \n");
+            if (ImGui.Button("Move MrsPeacock"))
+            {
+                Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+                TokenManager.Instance.AssignPlayer(1, Greet.PlayerCharacterOptions.MrsPeacock);
+                TokenManager.Instance.MovePlayer(1, ClientGRPCService.Instance.MovePlayerLocation(1, Greet.Location.HallwayOne));
+                Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+            }
+
+            ImGui.Text("Move MissScarlet! \n");
+            if (ImGui.Button("Move MissScarlet to HallwayOne"))
+            {
+                Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+                TokenManager.Instance.AssignPlayer(2, Greet.PlayerCharacterOptions.MissScarlet);
+                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayOne));
+                Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+            }
+            if (ImGui.Button("Move MissScarlet to Kitchen"))
+            {   
+                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.Kitchen));                
             }
 
             ImGui.Text("Make A Move! \n");

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Clue_Less_Server.Managers;
 using System;
 
 namespace Clue_Less

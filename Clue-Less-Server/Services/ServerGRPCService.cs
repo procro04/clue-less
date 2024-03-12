@@ -2,6 +2,7 @@ using Clue_Less_Server;
 using Clue_Less_Server.Managers;
 using Clue_Less_Server.Managers.Interfaces;
 using Grpc.Core;
+using Greet;
 
 namespace Clue_Less_Server.Services
 {
@@ -26,6 +27,7 @@ namespace Clue_Less_Server.Services
 
         public override Task<PlayerMoveResponse> MovePlayerLocation(PlayerMoveRequest request, ServerCallContext context)
         {
+            Console.WriteLine("Server gRPC call - MovePlayerLocation - Lets Move a Player! ");
             return Task.FromResult(new PlayerMoveResponse
             {
                 PlayerLocation = BoardManager.Instance.MovePlayer(request.PlayerId, request.MoveToLocation)

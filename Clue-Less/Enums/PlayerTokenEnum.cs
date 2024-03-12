@@ -6,14 +6,5 @@ using System.Threading.Tasks;
 
 namespace Clue_Less.Enums
 {
-    public enum PlayerTokenEnum
-    {
-        ColMustard,
-        MissPeacock,
-        MissScarlet,
-        MissWhite,
-        MrGreen,
-        ProfPlum
-    }
 }
 

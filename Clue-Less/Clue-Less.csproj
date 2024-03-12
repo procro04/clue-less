@@ -47,7 +47,6 @@
     <PackageReference Include="TiledSharp" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Clue-Less-Server\Clue-Less-Server.csproj" />
     <ProjectReference Include="..\MonoGame.ImGuiNet-main\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
   <ItemGroup>

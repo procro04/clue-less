@@ -1,11 +1,7 @@
-﻿using Clue_Less_Server;
+﻿using Clue_Less;
 using Grpc.Net.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
+using Greet;
 
 namespace Services
 {
@@ -21,7 +17,7 @@ namespace Services
             channel = GrpcChannel.ForAddress("https://localhost:7052");
             networkService = new Greeter.GreeterClient(channel);
         }
-        public int MovePlayerLocation(int playerId, int playerMoveLocation)
+        public Location MovePlayerLocation(int playerId, Location playerMoveLocation)
         {
             return networkService.MovePlayerLocation(new PlayerMoveRequest
             {

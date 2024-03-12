@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Clue_Less.Models.GameplayObjects
+namespace Models.GameplayObjects
 {
     public class ClientMenuOption
     {
