@@ -10,6 +10,8 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
   rpc GetPlayerLocation(Empty) returns (IntegerResponse);
   rpc MovePlayerLocation(PlayerMoveRequest) returns (PlayerMoveResponse);
+  rpc ValidatePlayerAction(PlayerActionRequest) returns (PlayerActionResponse);
+  rpc SendGlobalPlayerNotification(GlobalPlayerNotificationRequest) returns (GlobalPlayerNotificationResponse);
 }
 
 
@@ -49,5 +51,20 @@ message PlayerMoveResponse {
     int32 playerLocation = 1;
 }
 
+message PlayerActionRequest {
+    bool validPlayerAction = 1;
+}
+
+message PlayerActionResponse {
+    bool validPlayerAction = 1;
+}
+
+message GlobalPlayerNotificationRequest {
+    string notification = 1;
+}
+
+message GlobalPlayerNotificationResponse {
+    string notification = 1;
+}
 
 

@@ -121,7 +121,7 @@
 /processorParam:TextureFormat=Color
 /build:gameportraits/prof_plum.png
 
-#begin gamerooms/ballroom.png
+#begin gameroomslabeled/ballroom.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -131,9 +131,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/ballroom.png
+/build:gameroomslabeled/ballroom.png
 
-#begin gamerooms/billiard.png
+#begin gameroomslabeled/billiard.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -143,9 +143,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/billiard.png
+/build:gameroomslabeled/billiard.png
 
-#begin gamerooms/concert_hall.png
+#begin gameroomslabeled/concert_hall.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -155,9 +155,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/concert_hall.png
+/build:gameroomslabeled/concert_hall.png
 
-#begin gamerooms/conservatory.png
+#begin gameroomslabeled/conservatory.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,9 +167,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/conservatory.png
+/build:gameroomslabeled/conservatory.png
 
-#begin gamerooms/dining_room.png
+#begin gameroomslabeled/dining_room.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -179,9 +179,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/dining_room.png
+/build:gameroomslabeled/dining_room.png
 
-#begin gamerooms/hallway.png
+#begin gameroomslabeled/hallway_horizontal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -191,9 +191,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/hallway.png
+/build:gameroomslabeled/hallway_horizontal.png
 
-#begin gamerooms/kitchen.png
+#begin gameroomslabeled/hallway_vertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -203,9 +203,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/kitchen.png
+/build:gameroomslabeled/hallway_vertical.png
 
-#begin gamerooms/library.png
+#begin gameroomslabeled/kitchen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -215,9 +215,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/library.png
+/build:gameroomslabeled/kitchen.png
 
-#begin gamerooms/lounge.png
+#begin gameroomslabeled/library.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -227,9 +227,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/lounge.png
+/build:gameroomslabeled/library.png
 
-#begin gamerooms/study.png
+#begin gameroomslabeled/lounge.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -239,7 +239,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gamerooms/study.png
+/build:gameroomslabeled/lounge.png
+
+#begin gameroomslabeled/study.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gameroomslabeled/study.png
 
 #begin gamesounds/423610__nimlos__rain_thunder_loop.mp3
 /importer:Mp3Importer

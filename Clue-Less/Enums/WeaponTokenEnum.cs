@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace Clue_Less.Enums
 {
-    public enum TokenEnum
+    public enum WeaponTokenEnum
     {
-        ColMustard,
-        MissPeacock,
-        MissScarlet,
-        MissWhite,
-        MrGreen,
-        ProfPlum,
         Candlestick,
         LetterOpener,
         Pipe,
