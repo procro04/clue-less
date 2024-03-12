@@ -51,5 +51,11 @@ namespace Clue_Less_Server.Services
                 Notification = NotificationManager.Instance.SendGlobalPlayerNotification(request.Notification)
             });
         }
+
+        public override Task<LoginReply> AttemptLogin(LoginRequest request, ServerCallContext context)
+        {
+            Console.WriteLine("Server gRPC call Attempt Login! " + request.Name + " " + request.Character.ToString());
+            return Task.FromResult(BoardManager.Instance.AttemptLogin(request.Name, request.Character));
+        }
     }
 }

@@ -10,7 +10,8 @@ namespace Managers
 {
     public class ClientBoardManager
     {
-        private System.Numerics.Vector2 MenuPosition;
+        private System.Numerics.Vector2 BottomMenuPosition;
+        private System.Numerics.Vector2 TopMenuPosition;
 
         private static readonly Lazy<ClientBoardManager> lazy = new Lazy<ClientBoardManager>(() => new ClientBoardManager());
         public static ClientBoardManager Instance { get { return lazy.Value; } }
@@ -102,6 +103,9 @@ namespace Managers
             Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayTwo));
             currentPos.X += hallwayTexHoriz.Width;
             Tiles.Add(new ClientBoardTile(loungeTex, currentPos, Location.Lounge));
+            currentPos.X += hallwayTexHoriz.Width;
+            TopMenuPosition.X = currentPos.X;
+            TopMenuPosition.Y = currentPos.Y;
 
             //Second row
             currentPos.Y += hallwayTexVert.Height;
@@ -130,11 +134,11 @@ namespace Managers
             Tiles.Add(new ClientBoardTile(diningRoomTex, currentPos, Location.DiningRoom));
             currentPos.X += diningRoomTex.Width;
 
-            MenuPosition.X = currentPos.X;
+            BottomMenuPosition.X = currentPos.X;
 
             //Fourth row
             currentPos.Y += hallwayTexVert.Height;
-            MenuPosition.Y = currentPos.Y;
+            BottomMenuPosition.Y = currentPos.Y;
             currentPos.X = startingPos.X;
             Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayEight));
             currentPos.X += hallwayTexVert.Width;
@@ -161,7 +165,8 @@ namespace Managers
             Tiles.Add(new ClientBoardTile(kitchenTex, currentPos, Location.Kitchen));
             currentPos.X += kitchenTex.Width;
 
-            MenuManager.Instance.SetAnchorPosition(MenuPosition);
+            MenuManager.Instance.SetBottomAnchorPosition(BottomMenuPosition);
+            MenuManager.Instance.SetTopAnchorPosition(TopMenuPosition);
         }
     }
 }

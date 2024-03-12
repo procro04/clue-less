@@ -10,6 +10,17 @@ service Greeter {
   rpc MovePlayerLocation(PlayerMoveRequest) returns (PlayerMoveResponse);
   rpc ValidatePlayerAction(PlayerActionRequest) returns (PlayerActionResponse);
   rpc SendGlobalPlayerNotification(GlobalPlayerNotificationRequest) returns (GlobalPlayerNotificationResponse);
+  rpc AttemptLogin (LoginRequest) returns (LoginReply);
+}
+
+message LoginRequest{
+    string name = 1;
+    PlayerCharacterOptions character = 2;
+}
+
+message LoginReply{
+    bool success = 1;
+    int32 playerId = 2;
 }
 
 

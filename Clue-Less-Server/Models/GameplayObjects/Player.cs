@@ -1,11 +1,20 @@
 ﻿using Clue_Less.Models.GameplayObjects;
+using Greet;
 using System.Numerics;
 
 namespace Models.GameplayObjects
 {
     public class Player
     {
+        public Player(string name, int playerId, PlayerCharacterOptions character)
+        {
+            Name = name;
+            PlayerId = playerId;            
+            Character = character;
+        }
+
         public string Name { get; set; }
+        public int PlayerId { get; set; }
         public bool IsCurrentTurn { get; set; } = false;
         public bool IsMakingSuggestion { get; set; } = false;
         public bool IsMakingAccusation { get; set; } = false;
@@ -13,10 +22,9 @@ namespace Models.GameplayObjects
         public bool IsInHallway { get; set; } = false;
         public bool IsInRoom { get; set; } = false; 
         public bool IsBeingAccused { get; set; } = false;
-        public Vector2 PlayerLocation { get; set; }
-        public int TokenId { get; set; }
+        public Location PlayerLocation { get; set; }
+        public PlayerCharacterOptions Character { get; set; }
         public bool HasMadeAccusation { get; set; } = false;
-        public int RoomLocatedInId { get; set; }
         public List<Card> CardsInHand { get; set; } = new List<Card>();
     }
 }

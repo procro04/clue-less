@@ -27,6 +27,15 @@ namespace Services
             }).PlayerLocation;
         }
 
+        public LoginReply AttemptLogin(string username, PlayerCharacterOptions character)
+        {
+            return networkService.AttemptLogin(new LoginRequest
+            {
+                Name = username,
+                Character = character
+            });
+        }
+
         public bool ValidatePlayerAction(bool isValidPlayerAction)
         {
             return networkService.ValidatePlayerAction(new PlayerActionRequest

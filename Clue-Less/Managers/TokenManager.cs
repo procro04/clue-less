@@ -3,6 +3,7 @@ using Greet;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Models.GameplayObjects;
+using Services;
 using System;
 using System.Collections.Generic;
 
@@ -22,6 +23,25 @@ namespace Managers
 
         public List<ClientWeapon> clientWeapons = new List<ClientWeapon>();
         public List<ClientPlayer> clientPlayers = new List<ClientPlayer>();
+        public ClientPlayer LoggedInPlayer = null;
+
+        public bool AttemptLogin(string username, PlayerCharacterOptions character)
+        {
+            var result = ClientGRPCService.Instance.AttemptLogin(username, character);
+            if(result.Success)
+            {
+                AssignPlayer(result.PlayerId, character);
+                foreach (var player in clientPlayers)
+                {
+                    if (player.PlayerId == result.PlayerId)
+                    {
+                        LoggedInPlayer = player;
+                    }
+                }
+                return true;
+            }
+            return false;            
+        }
 
         public void AssignPlayer(int playerId, PlayerCharacterOptions playerCharacter)
         {
