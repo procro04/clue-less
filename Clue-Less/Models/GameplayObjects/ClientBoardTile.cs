@@ -1,5 +1,4 @@
 ﻿using Clue_Less;
-using Clue_Less.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
