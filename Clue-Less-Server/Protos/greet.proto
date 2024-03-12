@@ -66,6 +66,13 @@ enum Location {
     Kitchen = 20;
 }
 
+enum MenuOptionEnum {
+    StartNewGame = 0,
+    JoinGame = 1,
+    MakeSuggestion = 2,
+    MakeAccusation = 3
+}
+
 message Empty {
 
 }
