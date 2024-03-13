@@ -1,19 +1,17 @@
-using Clue_Less_Server;
 using Clue_Less_Server.Managers;
-using Clue_Less_Server.Managers.Interfaces;
 using Grpc.Core;
 using Greet;
+using Models.GameplayObjects;
+using System;
 
 namespace Clue_Less_Server.Services
 {
     public class ServerGRPCService : Greeter.GreeterBase
     {
         private readonly ILogger<ServerGRPCService> _logger;
-        private readonly IBoardManager _boardManager;
         public ServerGRPCService(ILogger<ServerGRPCService> logger)
         {
             _logger = logger;
-            _boardManager = new BoardManager();
         }
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
@@ -56,6 +54,21 @@ namespace Clue_Less_Server.Services
         {
             Console.WriteLine("Server gRPC call Attempt Login! " + request.Name + " " + request.Character.ToString());
             return Task.FromResult(BoardManager.Instance.AttemptLogin(request.Name, request.Character));
+        }
+
+        public override Task<SolutionResponse> GetSolution(SolutionRequest request, ServerCallContext context)
+        {
+            //add some validation here
+            Console.WriteLine("Server gRPC call - Get Card Solution!");
+            return Task.FromResult(BoardManager.Instance.GetSolution(request.RequestingPlayerId, request.SuspectedLocation, request.SuspectedCharacter, request.SuspectedWeapon));
+
+        }
+
+        public override Task<Empty> StartGame(Empty request, ServerCallContext context)
+        {
+            Console.WriteLine("Server gRPC call - Get Card Solution!");
+            BoardManager.Instance.StartGame();
+            return Task.FromResult(new Empty());
         }
     }
 }

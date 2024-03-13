@@ -1,31 +1,82 @@
-﻿using Clue_Less_Server.Managers.Interfaces;
-using Greet;
+﻿using Greet;
 using Models.GameplayObjects;
-using System.Collections;
-using System.ComponentModel;
 
 namespace Clue_Less_Server.Managers
 {
-    public class BoardManager : IBoardManager
+    public class BoardManager 
     {
         private static readonly Lazy<BoardManager> lazy = new Lazy<BoardManager>(() => new BoardManager());
         public static BoardManager Instance { get { return lazy.Value; } }
 
-        private List<int> boardPosition;
-        private int playerPosition;
         private List<Player> playerList = new List<Player>();
         private int playerIdCounter = 0;
+        private Solution solution = new Solution();
+        Random rng = new Random();
+
         public BoardManager() {
-            boardPosition = new List<int> { 0, 1, 2 };
-            playerPosition = 0;
         }
 
-        public int GetPlayerLocation()
+        public void StartGame()
         {
-            return playerPosition; 
+            GenerateSolution();            
+            DealCards();
+        }
+
+        private void DealCards()
+        {
+            var shuffledCards = InitializeCardsToDeal();
+            int i = 0;
+            int playerCount = playerList.Count;
+            foreach (var card in shuffledCards)
+            {
+                playerList[i].CardsInHand.Add(card);
+                i++;
+                if (i == playerCount)
+                {
+                    i = 0;
+                }
+            }
+        }
+
+        private List<Card> InitializeCardsToDeal()
+        {
+            var cards = new List<Card>();
+            foreach(PlayerCharacterOptions character in Enum.GetValues(typeof(PlayerCharacterOptions)))
+            {
+                var newCard = new Card();
+                newCard.Type = CardType.CharacterCard;
+                newCard.Character = character;
+                if (character != solution.Murderer)
+                {
+                    cards.Add(newCard);
+                }                
+            }
+            foreach (WeaponTokenEnum weapon in Enum.GetValues(typeof(WeaponTokenEnum)))
+            {
+                var newCard = new Card();
+                newCard.Type = CardType.WeaponCard;
+                newCard.Weapon = weapon;
+                if (weapon != solution.MurderWeapon)
+                {
+                    cards.Add(newCard);
+                }
+            }
+            foreach (MurderRoomsEnum location in Enum.GetValues(typeof(MurderRoomsEnum)))
+            {
+                var newCard = new Card();
+                newCard.Type = CardType.MurderRoomCard;
+                newCard.MurderRoom = location;
+                if (location != solution.MurderRoom)
+                {
+                    cards.Add(newCard);
+                }
+            }            
+            var shuffledCards = cards.OrderBy(_ => rng.Next()).ToList();
+            shuffledCards.ForEach(c => Console.WriteLine("Shuffled cards " + c.Type));
+            return shuffledCards;
         }
         
-        public Greet.Location MovePlayer(int playerId, Greet.Location moveToPosition)
+        public Location MovePlayer(int playerId, Location moveToPosition)
         {
             //You'll need to write validation code that makes sure this is a valid move, track the player, etc.
             //for now, we just say yep! Go there.
@@ -34,8 +85,10 @@ namespace Clue_Less_Server.Managers
 
         public LoginReply AttemptLogin(string playerName, PlayerCharacterOptions character)
         {
-            var LoginResult = new LoginReply();
-            LoginResult.Success = true;
+            var LoginResult = new LoginReply
+            {
+                Success = true
+            };
             foreach (var player in playerList)
             {
                 if (player.Character == character)
@@ -50,6 +103,37 @@ namespace Clue_Less_Server.Managers
                 playerList.Add(newPlayer);
             }
             return LoginResult;
+        }
+
+        private void GenerateSolution()
+        {
+            solution = new Solution();
+            solution.Murderer = (PlayerCharacterOptions)rng.Next(0, Enum.GetNames(typeof(PlayerCharacterOptions)).Length);
+            solution.MurderWeapon = (WeaponTokenEnum)rng.Next(0, Enum.GetNames(typeof(WeaponTokenEnum)).Length);
+            solution.MurderRoom = (MurderRoomsEnum)rng.Next(0, Enum.GetNames(typeof(MurderRoomsEnum)).Length);
+
+            Console.WriteLine($"Solution! It was { solution.Murderer } in the {solution.MurderRoom} with the {solution.MurderWeapon}!");
+        }
+
+        public SolutionResponse GetSolution(int requestingPlayerId, MurderRoomsEnum suspectedLocation, PlayerCharacterOptions suspectedCharacter, WeaponTokenEnum suspectedWeapon)
+        {
+            //validate whether it is the requesting player's turn
+            //and that they have not made an accusation previously
+            var Result = new SolutionResponse();
+            Result.Correct = true;
+            if(solution.MurderWeapon != suspectedWeapon)
+            {
+                Result.Correct = false;
+            }
+            if(solution.Murderer != suspectedCharacter)
+            {
+                Result.Correct = false;
+            }
+            if(solution.MurderRoom != suspectedLocation)
+            {
+                Result.Correct = false;
+            }
+            return Result;
         }
     }
 }

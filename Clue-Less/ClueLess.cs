@@ -42,7 +42,7 @@ namespace Clue_Less
             _graphics.ApplyChanges();
             Window.Title = "Clue-Less: Just like the real game...but less!";
 
-            InitializeMusicAndSound();
+            //InitializeMusicAndSound();
             GuiRenderer = new ImGuiRenderer(Globals.Instance.Game);
 
             base.Initialize();

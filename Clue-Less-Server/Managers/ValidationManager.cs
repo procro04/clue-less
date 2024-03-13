@@ -1,8 +1,6 @@
-﻿using Clue_Less_Server.Managers.Interfaces;
-
-namespace Clue_Less_Server.Managers
+﻿namespace Clue_Less_Server.Managers
 {
-    public class ValidationManager : IValidationManager
+    public class ValidationManager
     {
         private static readonly Lazy<ValidationManager> lazy = new Lazy<ValidationManager>(() => new ValidationManager());
         public static ValidationManager Instance { get { return lazy.Value; } }

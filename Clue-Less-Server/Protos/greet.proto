@@ -5,12 +5,13 @@ package greet;
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
-  rpc GetPlayerLocation(Empty) returns (IntegerResponse);
+  rpc SayHello (HelloRequest) returns (HelloReply);  
   rpc MovePlayerLocation(PlayerMoveRequest) returns (PlayerMoveResponse);
   rpc ValidatePlayerAction(PlayerActionRequest) returns (PlayerActionResponse);
   rpc SendGlobalPlayerNotification(GlobalPlayerNotificationRequest) returns (GlobalPlayerNotificationResponse);
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
+  rpc GetSolution(SolutionRequest) returns (SolutionResponse);
+  rpc StartGame(Empty) returns (Empty);
 }
 
 message LoginRequest{
@@ -34,6 +35,65 @@ message HelloReply {
   string message = 1;
 }
 
+message Empty {
+}
+
+message IntegerResponse {
+    int32 response = 1;
+}
+
+message PlayerMoveRequest {
+    int32 playerId = 1;
+    Location moveToLocation = 2;
+}
+
+message PlayerMoveResponse {
+    Location playerLocation = 1;
+}
+
+message PlayerActionRequest {
+    bool validPlayerAction = 1;
+}
+
+message PlayerActionResponse {
+    bool validPlayerAction = 1;
+}
+
+message GlobalPlayerNotificationRequest {
+    string notification = 1;
+}
+
+message GlobalPlayerNotificationResponse {
+    string notification = 1;
+}
+
+message SolutionRequest {
+   int32 requestingPlayerId = 1;
+   MurderRoomsEnum SuspectedLocation = 2;
+   PlayerCharacterOptions SuspectedCharacter = 3;
+   WeaponTokenEnum SuspectedWeapon = 4;
+}
+
+message SolutionResponse {
+    bool Correct = 1;
+    PlayerCharacterOptions murderer = 2;
+    MurderRoomsEnum murderRoom = 3;
+    WeaponTokenEnum murderWeapon = 4;
+}
+
+message Card{
+    CardType type = 1;
+    PlayerCharacterOptions character = 2;
+    WeaponTokenEnum weapon = 3;
+    MurderRoomsEnum murderRoom = 4;
+}
+
+enum CardType{
+    WeaponCard = 0;
+    CharacterCard = 1;
+    MurderRoomCard =2;
+}
+
 enum PlayerCharacterOptions {
 	MrsPeacock = 0;
     ProfessorPlum = 1;
@@ -51,6 +111,18 @@ enum WeaponTokenEnum
     Revolver = 3;
     Rope = 4;
     Wrench = 5;
+}
+
+enum MurderRoomsEnum {
+    StudySolutionCard = 0;
+    ConcertHallSolutionCard = 1;
+    LoungeSolutionSolutionCard = 2;
+    LibrarySolutionCard = 3;
+    BilliardSolutionCard = 4;
+    DiningRoomSolutionCard = 5;
+    ConservatorySolutionCard = 6;
+    BallroomSolutionCard = 7;
+    KitchenSolutionCard = 8;   
 }
 
 enum Location {
@@ -83,38 +155,3 @@ enum MenuOptionEnum {
     MakeSuggestion = 2;
     MakeAccusation = 3;
 }
-
-message Empty {
-
-}
-
-message IntegerResponse {
-    int32 response = 1;
-}
-
-message PlayerMoveRequest {
-    int32 playerId = 1;
-    Location moveToLocation = 2;
-}
-
-message PlayerMoveResponse {
-    Location playerLocation = 1;
-}
-
-message PlayerActionRequest {
-    bool validPlayerAction = 1;
-}
-
-message PlayerActionResponse {
-    bool validPlayerAction = 1;
-}
-
-message GlobalPlayerNotificationRequest {
-    string notification = 1;
-}
-
-message GlobalPlayerNotificationResponse {
-    string notification = 1;
-}
-
-

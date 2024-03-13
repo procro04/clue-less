@@ -65,6 +65,15 @@ namespace Managers
 
                 //Debug.WriteLine("gRPC Request to move Player Token begin");
             }
+            if (ImGui.Button("StartGame"))
+            {
+                ClientGRPCService.Instance.StartGame();
+            }
+            if (ImGui.Button("AddFakePlayers"))
+            {
+                TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
+                TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
+            }
             if (TokenManager.Instance.LoggedInPlayer == null)
             {
                 if (!EnteredUserName && ImGui.InputText("Enter Desired UserName", PlayerUserNameBuf, 32, ImGuiInputTextFlags.EnterReturnsTrue, null))

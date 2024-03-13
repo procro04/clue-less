@@ -36,6 +36,11 @@ namespace Services
             });
         }
 
+        public void StartGame()
+        {
+            networkService.StartGame(new Empty());
+        }
+
         public bool ValidatePlayerAction(bool isValidPlayerAction)
         {
             return networkService.ValidatePlayerAction(new PlayerActionRequest
