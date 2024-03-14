@@ -72,6 +72,7 @@ namespace Managers
                 }
             }            
             var shuffledCards = cards.OrderBy(_ => rng.Next()).ToList();
+            shuffledCards.ForEach(c => Console.WriteLine("Shuffled cards " + c.Type));
             return shuffledCards;
         }
 

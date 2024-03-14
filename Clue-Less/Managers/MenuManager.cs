@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using Microsoft.Xna.Framework;
+using Models.GameplayObjects;
 using Services;
 using System;
 using System.Diagnostics;
@@ -67,15 +68,10 @@ namespace Managers
 
                 //Debug.WriteLine("gRPC Request to move Player Token begin");
             }
-            //if (ImGui.Button("StartGame"))
-            //{
-            //    ClientGRPCService.Instance.StartGame();
-            //}
-            //if (ImGui.Button("AddFakePlayers"))
-            //{
-            //    TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
-            //    TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
-            //}
+            if (ImGui.Button("Deal Player Cards"))
+            {
+                ClientGRPCService.Instance.StartGame();
+            }
             if (TokenManager.Instance.LoggedInPlayer == null)
             {
                 if (!EnteredUserName && ImGui.InputText("Enter Desired UserName", PlayerUserNameBuf, 32, ImGuiInputTextFlags.EnterReturnsTrue, null))
@@ -110,6 +106,13 @@ namespace Managers
             {
                 if (EnteredUserName && SelectedCharacter)
                 {
+                    if (ImGui.Button("Get Turn Order"))
+                    {
+                        TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
+                        TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
+                        TokenManager.Instance.clientPlayers.ForEach(c => Debug.WriteLine("Player Turn Order " + c.TokenValue));
+                    }
+
                     if (ImGui.Button("Initialize Players"))
                     {
                         Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
