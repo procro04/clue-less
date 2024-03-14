@@ -63,7 +63,7 @@ namespace Managers
                 new ClientPlayer { Name = "Professor Plum", TokenId = 2, TokenValue = PlayerCharacterOptions.ProfessorPlum, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/prof_plum_token") },
                 new ClientPlayer { Name = "Miss Scarlet",   TokenId = 3, TokenValue = PlayerCharacterOptions.MissScarlet,   Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_scarlet_token") },
                 new ClientPlayer { Name = "Col. Mustard",   TokenId = 4, TokenValue = PlayerCharacterOptions.ColMustard,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/col_mustard_token") },
-                new ClientPlayer { Name = "Mrs. White",     TokenId = 5, TokenValue = PlayerCharacterOptions.ColMustard,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
+                new ClientPlayer { Name = "Mrs. White",     TokenId = 5, TokenValue = PlayerCharacterOptions.MrsWhite,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
                 new ClientPlayer { Name = "Mr. Green",      TokenId = 6, TokenValue = PlayerCharacterOptions.MrGreen,       Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/mr_green_token") }
             };
         }

@@ -1,7 +1,7 @@
 ﻿using Greet;
 using Models.GameplayObjects;
 
-namespace Clue_Less_Server.Managers
+namespace Managers
 {
     public class BoardManager 
     {
@@ -72,10 +72,29 @@ namespace Clue_Less_Server.Managers
                 }
             }            
             var shuffledCards = cards.OrderBy(_ => rng.Next()).ToList();
-            shuffledCards.ForEach(c => Console.WriteLine("Shuffled cards " + c.Type));
             return shuffledCards;
         }
-        
+
+        //This is the real method but won't be hooked up for skeletal increment 
+        //public bool CheckPlayerCards(int playerId, Card playerCardToCheck)
+        //{
+        //    var player = playerList.FirstOrDefault(x => x.PlayerId == playerId);
+        //    if (player != null)
+        //    {
+        //        return player.CardsInHand.Contains(playerCardToCheck);
+        //    }
+        //    return false;
+        //}
+
+        public string CheckPlayerCards(bool hasInHand)
+        {
+            if (hasInHand)
+            {
+                return "Suggestion Disproven! This card is in Player_X's hand!";
+            }
+            return "This suggestion cannot be disproven!";
+        }
+
         public Location MovePlayer(int playerId, Location moveToPosition)
         {
             //You'll need to write validation code that makes sure this is a valid move, track the player, etc.

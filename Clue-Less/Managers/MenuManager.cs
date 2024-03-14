@@ -13,7 +13,6 @@ namespace Managers
 
         private static readonly Lazy<MenuManager> lazy = new Lazy<MenuManager>(() => new MenuManager());
         public static MenuManager Instance { get { return lazy.Value; } }
-        public bool ShowText = false;
         public MenuManager() { }
 
         private System.Numerics.Vector2 BottomAnchorPosition;
@@ -22,6 +21,9 @@ namespace Managers
         string PlayerUserName;
         bool EnteredUserName = false;
         bool SelectedCharacter = false;
+        public bool ShowText = false;
+        public string PlayerCardMessage = "";
+        public bool ShowPlayerCardMessage = false;
 
         public void SetBottomAnchorPosition(System.Numerics.Vector2 bottomAnchorPosition)
         {
@@ -46,7 +48,7 @@ namespace Managers
             ImGui.SetNextWindowPos(TopAnchorPosition, ImGuiCond.Always);
             ImGui.SetNextWindowSize(new System.Numerics.Vector2(400, 200));
             ImGui.Begin("Notification", window_flags);
-            //RenderButtons();
+            BroadcastGlobalNotification();
             ImGui.End();
 
 
@@ -65,15 +67,15 @@ namespace Managers
 
                 //Debug.WriteLine("gRPC Request to move Player Token begin");
             }
-            if (ImGui.Button("StartGame"))
-            {
-                ClientGRPCService.Instance.StartGame();
-            }
-            if (ImGui.Button("AddFakePlayers"))
-            {
-                TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
-                TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
-            }
+            //if (ImGui.Button("StartGame"))
+            //{
+            //    ClientGRPCService.Instance.StartGame();
+            //}
+            //if (ImGui.Button("AddFakePlayers"))
+            //{
+            //    TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
+            //    TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
+            //}
             if (TokenManager.Instance.LoggedInPlayer == null)
             {
                 if (!EnteredUserName && ImGui.InputText("Enter Desired UserName", PlayerUserNameBuf, 32, ImGuiInputTextFlags.EnterReturnsTrue, null))
@@ -149,6 +151,7 @@ namespace Managers
                         TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayOne));
                         Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
                     }
+
                     if (ImGui.Button("Move MissScarlet to Kitchen"))
                     {
                         TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.Kitchen));
@@ -177,14 +180,28 @@ namespace Managers
                         ShowText = true;
                         Debug.WriteLine("Client side end global msg");
                     }
-
-                    if (ShowText)
+                    
+                    if (ImGui.Button("Check Player Cards"))
                     {
-                        ImGui.Text("CLUE-LESS! JUST LIKE CLUE BUT LESS!");
+                        PlayerCardMessage = BoardManager.Instance.CheckPlayerCards(true);
+                        ShowPlayerCardMessage = true;
                     }
                 }
             }
             
+        }
+
+        public void BroadcastGlobalNotification()
+        {
+            if (ShowText)
+            {
+                ImGui.Text("CLUE-LESS! JUST LIKE CLUE BUT LESS!");
+            }
+
+            if (ShowPlayerCardMessage)
+            {
+                ImGui.Text(PlayerCardMessage);
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
-using Clue_Less_Server.Managers;
+using Managers;
 using Grpc.Core;
 using Greet;
 using Models.GameplayObjects;
 using System;
+using Clue_Less_Server.Managers;
 
 namespace Clue_Less_Server.Services
 {
