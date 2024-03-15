@@ -9,7 +9,7 @@ namespace Managers
         public static BoardManager Instance { get { return lazy.Value; } }
 
         private List<Player> playerList = new List<Player>();
-        private int playerIdCounter = 0;
+        private int playerIdCounter = 1;
         private Solution solution = new Solution();
         Random rng = new Random();
 
@@ -101,6 +101,16 @@ namespace Managers
             //You'll need to write validation code that makes sure this is a valid move, track the player, etc.
             //for now, we just say yep! Go there.
             return moveToPosition;
+        }
+
+        public List<int> GetPlayerTurnOrder()
+        {
+            List<int> result = new List<int>();
+            foreach(Player player in playerList)
+            {
+                result.Add(player.PlayerId);
+            }
+            return result;
         }
 
         public LoginReply AttemptLogin(string playerName, PlayerCharacterOptions character)

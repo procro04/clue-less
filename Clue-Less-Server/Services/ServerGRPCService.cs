@@ -57,6 +57,18 @@ namespace Clue_Less_Server.Services
             return Task.FromResult(BoardManager.Instance.AttemptLogin(request.Name, request.Character));
         }
 
+        public override Task<PlayerTurnOrderResult> GetPlayerTurnOrder(Empty request, ServerCallContext context)
+        {
+            Console.WriteLine("Server gRPC call GetPlayerTurnOrder! ");
+            var result = BoardManager.Instance.GetPlayerTurnOrder();
+            PlayerTurnOrderResult turnOrder = new PlayerTurnOrderResult();
+            foreach(int playerId in result)
+            {
+                turnOrder.PlayerIdsInOrder.Add(playerId);
+            }            
+            return Task.FromResult(turnOrder);
+        }
+
         public override Task<SolutionResponse> GetSolution(SolutionRequest request, ServerCallContext context)
         {
             //add some validation here

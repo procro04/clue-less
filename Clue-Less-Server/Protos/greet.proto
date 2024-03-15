@@ -12,7 +12,14 @@ service Greeter {
   rpc SendGlobalPlayerNotification(GlobalPlayerNotificationRequest) returns (GlobalPlayerNotificationResponse);
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
   rpc GetSolution(SolutionRequest) returns (SolutionResponse);
+  rpc GetPlayerTurnOrder(Empty) returns (PlayerTurnOrderResult);
     
+}
+
+message PlayerTurnOrderResult
+{
+    bool success = 1;
+    repeated int32 playerIdsInOrder = 2;
 }
 
 message LoginRequest{

@@ -2,6 +2,7 @@
 using Grpc.Net.Client;
 using System;
 using Greet;
+using System.Collections.Generic;
 
 namespace Services
 {
@@ -34,6 +35,18 @@ namespace Services
                 Name = username,
                 Character = character
             });
+        }
+
+        public List<int> GetPlayerTurnOrder()
+        {
+            var result = networkService.GetPlayerTurnOrder(new Empty());
+            List<int> playerOrder = new List<int>();
+            foreach (int player in result.PlayerIdsInOrder)
+            {
+                playerOrder.Add(player);
+            }
+
+            return playerOrder;
         }
 
         public void StartGame()

@@ -57,23 +57,21 @@ namespace Managers
 
         public void RenderButtons()
         {
-            if (ImGui.Button("Say Hello"))
-            {
-                // The port number must match the port of the gRPC server. 
-                // TODO Revisit when hosted on Azure
-                Debug.WriteLine("Beginning gRPC Client instantiation \n");
-                var reply = ClientGRPCService.Instance.SayHello("GreeterClient");
-                Debug.WriteLine("Greetings, Earthling!: " + reply);
-                Debug.WriteLine("End gRPC Client instantiation \n");
-
-                //Debug.WriteLine("gRPC Request to move Player Token begin");
-            }
-            if (ImGui.Button("Deal Player Cards"))
-            {
-                ClientGRPCService.Instance.StartGame();
-            }
+                       
             if (TokenManager.Instance.LoggedInPlayer == null)
             {
+                if (ImGui.Button("Say Hello"))
+                {
+                    // The port number must match the port of the gRPC server. 
+                    // TODO Revisit when hosted on Azure
+                    Debug.WriteLine("Beginning gRPC Client instantiation \n");
+                    var reply = ClientGRPCService.Instance.SayHello("GreeterClient");
+                    Debug.WriteLine("Greetings, Earthling!: " + reply);
+                    Debug.WriteLine("End gRPC Client instantiation \n");
+
+                    //Debug.WriteLine("gRPC Request to move Player Token begin");
+                }
+
                 if (!EnteredUserName && ImGui.InputText("Enter Desired UserName", PlayerUserNameBuf, 32, ImGuiInputTextFlags.EnterReturnsTrue, null))
                 {
                     PlayerUserName = System.Text.Encoding.UTF8.GetString(PlayerUserNameBuf);
@@ -105,57 +103,47 @@ namespace Managers
             else
             {
                 if (EnteredUserName && SelectedCharacter)
-                {
-                    if (ImGui.Button("Get Turn Order"))
+                {                    
+                    if (ImGui.Button("Initialize Fake Players Bob and George"))
                     {
                         TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
-                        TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);
-                        TokenManager.Instance.clientPlayers.ForEach(c => Debug.WriteLine("Player Turn Order " + c.TokenValue));
+                        TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);                        
                     }
 
-                    if (ImGui.Button("Initialize Players"))
+                    if (ImGui.Button("Deal Player Cards"))
                     {
-                        Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
-                        TokenManager.Instance.InitializePlayers();
-                        Debug.WriteLine("Our suspects");
-                        foreach (var player in TokenManager.Instance.clientPlayers)
-                        {
-                            Debug.WriteLine(player.Name);
-                        }
-                        Debug.WriteLine("Ending Token Manager's Instantiation of Suspects/Players \n");
+                        ClientGRPCService.Instance.StartGame();
                     }
 
-                    if (ImGui.Button("Initialize Weapons"))
+                    if (ImGui.Button("GetPlayerTurnOrder"))
                     {
-                        Debug.WriteLine("Beginning Token Manager's Instantiation of Weapons \n");
-                        TokenManager.Instance.InitializeWeapons();
-                        Debug.WriteLine("Possible murder weapons");
-                        foreach (var weapon in TokenManager.Instance.clientWeapons)
-                        {
-                            Debug.WriteLine(weapon.Name);
-                        }
-                        Debug.WriteLine("End Token Manager's Instantiation of Weapons");
+                        TokenManager.Instance.GetPlayerTurnOrder().ForEach(c => Debug.WriteLine("Player Turn Order " + c));
                     }
 
-                    ImGui.Text("Move MrsPeacock! \n");
-                    if (ImGui.Button("Move MrsPeacock"))
+                    ImGui.Text("Move Current Player! \n");
+                    if (ImGui.Button("Move Us (Current Player) to HallwayOne"))
                     {
                         Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
-                        TokenManager.Instance.AssignPlayer(1, Greet.PlayerCharacterOptions.MrsPeacock);
                         TokenManager.Instance.MovePlayer(1, ClientGRPCService.Instance.MovePlayerLocation(1, Greet.Location.HallwayOne));
                         Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
                     }
 
-                    ImGui.Text("Move MissScarlet! \n");
-                    if (ImGui.Button("Move MissScarlet to HallwayOne"))
+                    ImGui.Text("Move Player 2(Bob)! \n");
+                    if (ImGui.Button("Move (Bob) MrGreen to HallwayOne"))
                     {
                         Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
-                        TokenManager.Instance.AssignPlayer(2, Greet.PlayerCharacterOptions.MissScarlet);
                         TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayOne));
                         Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
                     }
+                    ImGui.Text("Move Player 3(George)! \n");
+                    if (ImGui.Button("Move (George) MrsWhite to HallwayThree"))
+                    {
+                        Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+                        TokenManager.Instance.MovePlayer(3, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayThree));
+                        Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
+                    }
 
-                    if (ImGui.Button("Move MissScarlet to Kitchen"))
+                    if (ImGui.Button("Move Player 2(Bob) to Kitchen"))
                     {
                         TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.Kitchen));
                     }
@@ -188,6 +176,32 @@ namespace Managers
                     {
                         PlayerCardMessage = BoardManager.Instance.CheckPlayerCards(true);
                         ShowPlayerCardMessage = true;
+                    }
+
+                    //These methods are no longer needed, but are currently here for the demo.
+                    //TODO: Remove
+                    if (ImGui.Button("Initialize Players"))
+                    {
+                        Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
+                        TokenManager.Instance.InitializePlayers();
+                        Debug.WriteLine("Our suspects");
+                        foreach (var player in TokenManager.Instance.clientPlayers)
+                        {
+                            Debug.WriteLine(player.Name);
+                        }
+                        Debug.WriteLine("Ending Token Manager's Instantiation of Suspects/Players \n");
+                    }
+
+                    if (ImGui.Button("Initialize Weapons"))
+                    {
+                        Debug.WriteLine("Beginning Token Manager's Instantiation of Weapons \n");
+                        TokenManager.Instance.InitializeWeapons();
+                        Debug.WriteLine("Possible murder weapons");
+                        foreach (var weapon in TokenManager.Instance.clientWeapons)
+                        {
+                            Debug.WriteLine(weapon.Name);
+                        }
+                        Debug.WriteLine("End Token Manager's Instantiation of Weapons");
                     }
                 }
             }

@@ -43,6 +43,11 @@ namespace Managers
             return false;            
         }
 
+        public List<int> GetPlayerTurnOrder()
+        {
+            return ClientGRPCService.Instance.GetPlayerTurnOrder();
+        }
+
         public void AssignPlayer(int playerId, PlayerCharacterOptions playerCharacter)
         {
             foreach (var player  in clientPlayers)

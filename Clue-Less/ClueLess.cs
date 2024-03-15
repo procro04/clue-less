@@ -33,7 +33,7 @@ namespace Clue_Less
         {
             //Globals inits
             Globals.Instance.Game = this;
-            Globals.Instance.Bounds = new(1400, 1000);
+            Globals.Instance.Bounds = new(1400, 975);
             Globals.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.Instance.Content = Content;
 
