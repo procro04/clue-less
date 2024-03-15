@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Greet;
 
 namespace Models.GameplayObjects
 {
@@ -12,6 +9,9 @@ namespace Models.GameplayObjects
         public int Id { get; set; }
         public string Name { get; set; }
         public int TokenId { get; set; }
-        public Vector2 TokenLocation { get; set; }
+        public WeaponTokenEnum TokenValue { get; set; }
+        public Texture2D Texture { get; set; }
+        public Vector2 Position { get; set; }
+
     }
 }

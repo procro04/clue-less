@@ -1,13 +1,28 @@
 syntax = "proto3";
 
-option csharp_namespace = "Clue_Less_Server";
-
 package greet;
 
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc SayHello (HelloRequest) returns (HelloReply);  
+  rpc StartGame(Empty) returns (Empty);
+  rpc MovePlayerLocation(PlayerMoveRequest) returns (PlayerMoveResponse);
+  rpc ValidatePlayerAction(PlayerActionRequest) returns (PlayerActionResponse);
+  rpc SendGlobalPlayerNotification(GlobalPlayerNotificationRequest) returns (GlobalPlayerNotificationResponse);
+  rpc AttemptLogin (LoginRequest) returns (LoginReply);
+  rpc GetSolution(SolutionRequest) returns (SolutionResponse);
+    
+}
+
+message LoginRequest{
+    string name = 1;
+    PlayerCharacterOptions character = 2;
+}
+
+message LoginReply{
+    bool success = 1;
+    int32 playerId = 2;
 }
 
 
@@ -21,6 +36,66 @@ message HelloReply {
   string message = 1;
 }
 
+message Empty {
+}
+
+message IntegerResponse {
+    int32 response = 1;
+}
+
+message PlayerMoveRequest {
+    int32 playerId = 1;
+    Location moveToLocation = 2;
+}
+
+message PlayerMoveResponse {
+    Location playerLocation = 1;
+}
+
+message PlayerActionRequest {
+    bool validPlayerAction = 1;
+}
+
+message PlayerActionResponse {
+    bool validPlayerAction = 1;
+}
+
+message GlobalPlayerNotificationRequest {
+    string notification = 1;
+}
+
+message GlobalPlayerNotificationResponse {
+    string notification = 1;
+}
+
+
+message SolutionRequest {
+   int32 requestingPlayerId = 1;
+   MurderRoomsEnum SuspectedLocation = 2;
+   PlayerCharacterOptions SuspectedCharacter = 3;
+   WeaponTokenEnum SuspectedWeapon = 4;
+}
+
+message SolutionResponse {
+    bool Correct = 1;
+    PlayerCharacterOptions murderer = 2;
+    MurderRoomsEnum murderRoom = 3;
+    WeaponTokenEnum murderWeapon = 4;
+}
+
+message Card {
+    CardType type = 1;
+    PlayerCharacterOptions character = 2;
+    WeaponTokenEnum weapon = 3;
+    MurderRoomsEnum murderRoom = 4;
+}
+
+enum CardType{
+    WeaponCard = 0;
+    CharacterCard = 1;
+    MurderRoomCard =2;
+}
+
 enum PlayerCharacterOptions {
 	MrsPeacock = 0;
     ProfessorPlum = 1;
@@ -30,9 +105,55 @@ enum PlayerCharacterOptions {
     MrGreen = 5;
 }
 
-message Empty {
-
+enum WeaponTokenEnum
+{
+    Candlestick = 0;
+    LetterOpener = 1;
+    Pipe = 2;
+    Revolver = 3;
+    Rope = 4;
+    Wrench = 5;
 }
 
+enum MurderRoomsEnum {
+    StudySolutionCard = 0;
+    ConcertHallSolutionCard = 1;
+    LoungeSolutionSolutionCard = 2;
+    LibrarySolutionCard = 3;
+    BilliardSolutionCard = 4;
+    DiningRoomSolutionCard = 5;
+    ConservatorySolutionCard = 6;
+    BallroomSolutionCard = 7;
+    KitchenSolutionCard = 8;   
+}
 
+enum Location {
+	Study = 0;
+    HallwayOne = 1;
+    ConcertHall = 2;
+    HallwayTwo = 3;
+    Lounge = 4;
+    HallwayThree = 5;
+    HallwayFour = 6;
+    HallwayFive = 7;
+    Library = 8;
+    HallwaySix = 9;
+    Billiard = 10;
+    HallwaySeven = 11;
+    DiningRoom = 12;
+    HallwayEight = 13;
+    HallwayNine = 14;
+    HallwayTen = 15;
+    Conservatory = 16;
+    HallwayEleven = 17;
+    Ballroom = 18;
+    HallwayTwelve = 19;
+    Kitchen = 20;
+}
 
+enum MenuOptionEnum {
+    StartNewGame = 0;
+    JoinGame = 1;
+    MakeSuggestion = 2;
+    MakeAccusation = 3;
+}
