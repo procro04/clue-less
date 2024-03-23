@@ -58,24 +58,9 @@ namespace Clue_Less
 
             //TODO: Determine what is needed under here
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
-
-            // TODO: Add your update logic here
-
-            //Use monogame events for key presses or render
-            var kstate = Keyboard.GetState();
-            if (kstate.IsKeyDown(Keys.D))
-            {
-                //ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer + 1);
             }
-
-            if (kstate.IsKeyDown(Keys.A))
-            {
-                //ballPosition_asPlayer = ClientGRPCService.Instance.MovePlayerLocation(0, ballPosition_asPlayer - 1);
-            }
-
-            //this will go in the ball position render logic
-            ballPosition.X = startingPosition.X + (ballPosition_asPlayer * horizontalPixelOffsetForMovement);
 
             base.Update(gameTime);
         }

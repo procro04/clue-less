@@ -76,24 +76,14 @@ namespace Managers
             return shuffledCards;
         }
 
-        //This is the real method but won't be hooked up for skeletal increment 
-        //public bool CheckPlayerCards(int playerId, Card playerCardToCheck)
-        //{
-        //    var player = playerList.FirstOrDefault(x => x.PlayerId == playerId);
-        //    if (player != null)
-        //    {
-        //        return player.CardsInHand.Contains(playerCardToCheck);
-        //    }
-        //    return false;
-        //}
-
-        public string CheckPlayerCards(bool hasInHand)
+        public bool CheckPlayerCards(int playerId, Card playerCardToCheck)
         {
-            if (hasInHand)
+            var player = playerList.FirstOrDefault(x => x.PlayerId == playerId);
+            if (player != null)
             {
-                return "Suggestion Disproven! This card is in Player_X's hand!";
+                return player.CardsInHand.Contains(playerCardToCheck);
             }
-            return "This suggestion cannot be disproven!";
+            return false;
         }
 
         public Location MovePlayer(int playerId, Location moveToPosition)

@@ -25,6 +25,9 @@ namespace Managers
         public bool ShowText = false;
         public string PlayerCardMessage = "";
         public bool ShowPlayerCardMessage = false;
+        private bool ShowUserNameText = true;
+        private int TurnCounter = 0;
+        private bool GameInstanceStarted = false;
 
         public void SetBottomAnchorPosition(System.Numerics.Vector2 bottomAnchorPosition)
         {
@@ -42,7 +45,7 @@ namespace Managers
             ImGui.SetNextWindowPos(BottomAnchorPosition, ImGuiCond.Always);
             ImGui.SetNextWindowSize(new System.Numerics.Vector2(800,400));
             ImGui.Begin("PlayerOptions", window_flags);
-            RenderButtons();
+            HandleLogin();
             ImGui.End();
 
             //Notification Window
@@ -51,25 +54,15 @@ namespace Managers
             ImGui.Begin("Notification", window_flags);
             BroadcastGlobalNotification();
             ImGui.End();
-
-
         }
 
-        public void RenderButtons()
+        public void HandleLogin()
         {
-                       
             if (TokenManager.Instance.LoggedInPlayer == null)
             {
-                if (ImGui.Button("Say Hello"))
+                if  (ShowUserNameText)
                 {
-                    // The port number must match the port of the gRPC server. 
-                    // TODO Revisit when hosted on Azure
-                    Debug.WriteLine("Beginning gRPC Client instantiation \n");
-                    var reply = ClientGRPCService.Instance.SayHello("GreeterClient");
-                    Debug.WriteLine("Greetings, Earthling!: " + reply);
-                    Debug.WriteLine("End gRPC Client instantiation \n");
-
-                    //Debug.WriteLine("gRPC Request to move Player Token begin");
+                    ImGui.Text("Input Desired UserName and press the Enter key");
                 }
 
                 if (!EnteredUserName && ImGui.InputText("Enter Desired UserName", PlayerUserNameBuf, 32, ImGuiInputTextFlags.EnterReturnsTrue, null))
@@ -77,17 +70,18 @@ namespace Managers
                     PlayerUserName = System.Text.Encoding.UTF8.GetString(PlayerUserNameBuf);
                     PlayerUserName = PlayerUserName.Trim('\0');
                     EnteredUserName = true;
+                    ShowUserNameText = false;
                 }
                 else if (EnteredUserName && !SelectedCharacter)
                 {
-                    var ClientPlayers = TokenManager.Instance.clientPlayers;
-                    foreach (var player in ClientPlayers)
+                    var possibleTokens = TokenManager.Instance.AvailableTokens;
+                    foreach (var token in possibleTokens)
                     {
-                        if (player.PlayerId == 0)
+                        if (token.AssignedToPlayerId == 0)
                         {
-                            if (ImGui.Button("Select " + player.TokenValue.ToString()))
+                            if (ImGui.Button("Select " + token.TokenValue.ToString()))
                             {
-                                if (TokenManager.Instance.AttemptLogin(PlayerUserName, player.TokenValue))
+                                if (TokenManager.Instance.AttemptLogin(PlayerUserName, token.TokenValue))
                                 {
                                     SelectedCharacter = true;
                                 }
@@ -103,22 +97,13 @@ namespace Managers
             else
             {
                 if (EnteredUserName && SelectedCharacter)
-                {                    
+                {
                     if (ImGui.Button("Initialize Fake Players Bob and George"))
                     {
                         TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
                         TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);                        
-                    }
+                    }                 
 
-                    if (ImGui.Button("Deal Player Cards"))
-                    {
-                        ClientGRPCService.Instance.StartGame();
-                    }
-
-                    if (ImGui.Button("GetPlayerTurnOrder"))
-                    {
-                        TokenManager.Instance.GetPlayerTurnOrder().ForEach(c => Debug.WriteLine("Player Turn Order " + c));
-                    }
 
                     ImGui.Text("Move Current Player! \n");
                     if (ImGui.Button("Move Us (Current Player) to HallwayOne"))
@@ -131,9 +116,7 @@ namespace Managers
                     ImGui.Text("Move Player 2(Bob)! \n");
                     if (ImGui.Button("Move (Bob) MrGreen to HallwayOne"))
                     {
-                        Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
                         TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayOne));
-                        Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
                     }
                     ImGui.Text("Move Player 3(George)! \n");
                     if (ImGui.Button("Move (George) MrsWhite to HallwayThree"))
@@ -172,37 +155,12 @@ namespace Managers
                         Debug.WriteLine("Client side end global msg");
                     }
                     
-                    if (ImGui.Button("Check Player Cards"))
-                    {
-                        PlayerCardMessage = BoardManager.Instance.CheckPlayerCards(true);
-                        ShowPlayerCardMessage = true;
-                    }
+                    //if (ImGui.Button("Check Player Cards"))
+                    //{
+                    //    PlayerCardMessage = BoardManager.Instance.CheckPlayerCards(true);
+                    //    ShowPlayerCardMessage = true;
+                    //}
 
-                    //These methods are no longer needed, but are currently here for the demo.
-                    //TODO: Remove
-                    if (ImGui.Button("Initialize Players"))
-                    {
-                        Debug.WriteLine("Beginning Token Manager's Instantiation of Suspects/Players \n");
-                        TokenManager.Instance.InitializePlayers();
-                        Debug.WriteLine("Our suspects");
-                        foreach (var player in TokenManager.Instance.clientPlayers)
-                        {
-                            Debug.WriteLine(player.Name);
-                        }
-                        Debug.WriteLine("Ending Token Manager's Instantiation of Suspects/Players \n");
-                    }
-
-                    if (ImGui.Button("Initialize Weapons"))
-                    {
-                        Debug.WriteLine("Beginning Token Manager's Instantiation of Weapons \n");
-                        TokenManager.Instance.InitializeWeapons();
-                        Debug.WriteLine("Possible murder weapons");
-                        foreach (var weapon in TokenManager.Instance.clientWeapons)
-                        {
-                            Debug.WriteLine(weapon.Name);
-                        }
-                        Debug.WriteLine("End Token Manager's Instantiation of Weapons");
-                    }
                 }
             }
             
