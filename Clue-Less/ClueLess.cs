@@ -73,7 +73,10 @@ namespace Clue_Less
 
             // TODO: Add your drawing code here
             ClientBoardManager.Instance.Draw(gameTime);
-            TokenManager.Instance.Draw(gameTime);            
+            if (MenuManager.Instance.GameInstanceStarted)
+            {
+                TokenManager.Instance.Draw(gameTime);
+            }            
                         
             base.Draw(gameTime);
             GuiRenderer.EndLayout();

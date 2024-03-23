@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Models.GameplayObjects
 {
-    public class ClientAvailableToken
+    public class ClientToken
     {
         public string Name { get; set; }
         public int AssignedToPlayerId { get; set; }

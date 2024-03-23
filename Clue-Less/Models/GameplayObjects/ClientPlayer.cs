@@ -10,7 +10,7 @@ namespace Models.GameplayObjects
         public string Name { get; set; }
         public int PlayerId { get; set; }
         public int TokenId { get; set; }
-        public ClientAvailableToken AssignedToken { get; set; } = new ClientAvailableToken();
+        public ClientToken AssignedToken { get; set; } = new ClientToken();
     }
 }
 

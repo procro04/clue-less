@@ -24,7 +24,7 @@ namespace Managers
 
         public List<ClientWeapon> ClientWeapons = new List<ClientWeapon>();
         public List<ClientPlayer> ClientPlayers = new List<ClientPlayer>();
-        public List<ClientAvailableToken> AvailableTokens = new List<ClientAvailableToken>();
+        public List<ClientToken> AvailableTokens = new List<ClientToken>();
         public ClientPlayer LoggedInPlayer = null;
 
         public bool AttemptLogin(string username, PlayerCharacterOptions character)
@@ -75,14 +75,14 @@ namespace Managers
 
         public void InitializeAvailableTokens()
         {
-            AvailableTokens = new List<ClientAvailableToken>
+            AvailableTokens = new List<ClientToken>
             {
-                new ClientAvailableToken { Name = "Mrs. Peacock",   TokenId = 1, TokenValue = PlayerCharacterOptions.MrsPeacock,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_peacock_token") },
-                new ClientAvailableToken { Name = "Professor Plum", TokenId = 2, TokenValue = PlayerCharacterOptions.ProfessorPlum, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/prof_plum_token") },
-                new ClientAvailableToken { Name = "Miss Scarlet",   TokenId = 3, TokenValue = PlayerCharacterOptions.MissScarlet,   Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_scarlet_token") },
-                new ClientAvailableToken { Name = "Col. Mustard",   TokenId = 4, TokenValue = PlayerCharacterOptions.ColMustard,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/col_mustard_token") },
-                new ClientAvailableToken { Name = "Mrs. White",     TokenId = 5, TokenValue = PlayerCharacterOptions.MrsWhite,    Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
-                new ClientAvailableToken { Name = "Mr. Green",      TokenId = 6, TokenValue = PlayerCharacterOptions.MrGreen,       Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/mr_green_token") }
+                new ClientToken { Name = "Mrs. Peacock", TokenId = 1, TokenValue = PlayerCharacterOptions.MrsPeacock, CurrentLocation = Location.HallwayEight, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_peacock_token") },
+                new ClientToken { Name = "Professor Plum", TokenId = 2, TokenValue = PlayerCharacterOptions.ProfessorPlum, CurrentLocation = Location.HallwayThree, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/prof_plum_token") },
+                new ClientToken { Name = "Miss Scarlet", TokenId = 3, TokenValue = PlayerCharacterOptions.MissScarlet, CurrentLocation = Location.HallwayTwo, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_scarlet_token") },
+                new ClientToken { Name = "Col. Mustard", TokenId = 4, TokenValue = PlayerCharacterOptions.ColMustard, CurrentLocation = Location.HallwayFive, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/col_mustard_token") },
+                new ClientToken { Name = "Mrs. White", TokenId = 5, TokenValue = PlayerCharacterOptions.MrsWhite, CurrentLocation = Location.HallwayTwelve, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
+                new ClientToken { Name = "Mr. Green", TokenId = 6, TokenValue = PlayerCharacterOptions.MrGreen, CurrentLocation = Location.HallwayEleven, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/mr_green_token") }
             };
         }
 
