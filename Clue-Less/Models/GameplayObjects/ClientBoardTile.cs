@@ -32,20 +32,20 @@ namespace Models.GameplayObjects
             {
                 if (outSide)
                 {
-                    _position.X = position.X + (TokenManager.Instance.TileSize.X / 2) - (TokenManager.Instance.HomeSquareSize.X / 2);
-                    _position.Y = position.Y + (TokenManager.Instance.TileSize.Y - TokenManager.Instance.HomeSquareSize.Y );
+                    _position.X = position.X + (ClientTokenManager.Instance.TileSize.X / 2) - (ClientTokenManager.Instance.HomeSquareSize.X / 2);
+                    _position.Y = position.Y + (ClientTokenManager.Instance.TileSize.Y - ClientTokenManager.Instance.HomeSquareSize.Y );
                 }
                 else
                 {
-                    _position.X = position.X + (TokenManager.Instance.TileSize.X / 2) - (TokenManager.Instance.HomeSquareSize.X / 2);
+                    _position.X = position.X + (ClientTokenManager.Instance.TileSize.X / 2) - (ClientTokenManager.Instance.HomeSquareSize.X / 2);
                     _position.Y = position.Y;
                 }
                 
                 var newTokenSlot = new tokenSlot();
-                newTokenSlot.RenderPosition.X = _position.X + ((TokenManager.Instance.HomeSquareSize.X - TokenManager.Instance.PlayerTokenSize.X)/2);
-                newTokenSlot.RenderPosition.Y = _position.Y + ((TokenManager.Instance.HomeSquareSize.Y - TokenManager.Instance.PlayerTokenSize.Y)/2);
+                newTokenSlot.RenderPosition.X = _position.X + ((ClientTokenManager.Instance.HomeSquareSize.X - ClientTokenManager.Instance.PlayerTokenSize.X)/2);
+                newTokenSlot.RenderPosition.Y = _position.Y + ((ClientTokenManager.Instance.HomeSquareSize.Y - ClientTokenManager.Instance.PlayerTokenSize.Y)/2);
                 TokenSlots.Add(newTokenSlot);
-                _size = new Vector2(TokenManager.Instance.HomeSquareSize.X, TokenManager.Instance.HomeSquareSize.Y);
+                _size = new Vector2(ClientTokenManager.Instance.HomeSquareSize.X, ClientTokenManager.Instance.HomeSquareSize.Y);
             }
             else if (VerticalHallwayHomeSquare)
             {
@@ -53,39 +53,39 @@ namespace Models.GameplayObjects
                 var newTokenSlot = new tokenSlot();
                 if (outSide)
                 {
-                    _position.X = position.X + (TokenManager.Instance.TileSize.X - TokenManager.Instance.HomeSquareSize.X);
-                    _position.Y = position.Y + (TokenManager.Instance.TileSize.Y / 2) - (TokenManager.Instance.HomeSquareSize.Y / 2);                    
+                    _position.X = position.X + (ClientTokenManager.Instance.TileSize.X - ClientTokenManager.Instance.HomeSquareSize.X);
+                    _position.Y = position.Y + (ClientTokenManager.Instance.TileSize.Y / 2) - (ClientTokenManager.Instance.HomeSquareSize.Y / 2);                    
                 }
                 else
                 {
                     _position.X = position.X;
-                    _position.Y = position.Y + (TokenManager.Instance.TileSize.Y / 2) - (TokenManager.Instance.HomeSquareSize.Y / 2);                    
+                    _position.Y = position.Y + (ClientTokenManager.Instance.TileSize.Y / 2) - (ClientTokenManager.Instance.HomeSquareSize.Y / 2);                    
                 }
-                newTokenSlot.RenderPosition.X = _position.X + ((TokenManager.Instance.HomeSquareSize.X - TokenManager.Instance.PlayerTokenSize.X) / 2);
-                newTokenSlot.RenderPosition.Y = _position.Y + ((TokenManager.Instance.HomeSquareSize.Y - TokenManager.Instance.PlayerTokenSize.Y) / 2);
+                newTokenSlot.RenderPosition.X = _position.X + ((ClientTokenManager.Instance.HomeSquareSize.X - ClientTokenManager.Instance.PlayerTokenSize.X) / 2);
+                newTokenSlot.RenderPosition.Y = _position.Y + ((ClientTokenManager.Instance.HomeSquareSize.Y - ClientTokenManager.Instance.PlayerTokenSize.Y) / 2);
                 TokenSlots.Add(newTokenSlot);
-                _size = new Vector2(TokenManager.Instance.HomeSquareSize.X, TokenManager.Instance.HomeSquareSize.Y);
+                _size = new Vector2(ClientTokenManager.Instance.HomeSquareSize.X, ClientTokenManager.Instance.HomeSquareSize.Y);
             }
-            else if(HorizontalHallway)
+            else if (HorizontalHallway)
             {                
                 var newTokenSlot = new tokenSlot();               
                 _position = position;
                 newTokenSlot.RenderPosition = _position;
-                newTokenSlot.RenderPosition.X = _position.X + ((TokenManager.Instance.TileSize.X - TokenManager.Instance.PlayerTokenSize.X) / 2);
-                newTokenSlot.RenderPosition.Y = _position.Y + ((TokenManager.Instance.TileSize.Y - TokenManager.Instance.PlayerTokenSize.Y) / 2);
+                newTokenSlot.RenderPosition.X = _position.X + ((ClientTokenManager.Instance.TileSize.X - ClientTokenManager.Instance.PlayerTokenSize.X) / 2);
+                newTokenSlot.RenderPosition.Y = _position.Y + ((ClientTokenManager.Instance.TileSize.Y - ClientTokenManager.Instance.PlayerTokenSize.Y) / 2);
                 
                 TokenSlots.Add(newTokenSlot);
-                _size = new Vector2(TokenManager.Instance.TileSize.X, TokenManager.Instance.TileSize.Y);
+                _size = new Vector2(ClientTokenManager.Instance.TileSize.X, ClientTokenManager.Instance.TileSize.Y);
             }
-            else if(VerticalHallway)
+            else if (VerticalHallway)
             {
                 _position = position;
                 var newTokenSlot = new tokenSlot();
                 newTokenSlot.RenderPosition = _position;
-                newTokenSlot.RenderPosition.X = _position.X + ((TokenManager.Instance.TileSize.X - TokenManager.Instance.PlayerTokenSize.X) / 2);
-                newTokenSlot.RenderPosition.Y = _position.Y + ((TokenManager.Instance.TileSize.Y - TokenManager.Instance.PlayerTokenSize.Y) / 2);
+                newTokenSlot.RenderPosition.X = _position.X + ((ClientTokenManager.Instance.TileSize.X - ClientTokenManager.Instance.PlayerTokenSize.X) / 2);
+                newTokenSlot.RenderPosition.Y = _position.Y + ((ClientTokenManager.Instance.TileSize.Y - ClientTokenManager.Instance.PlayerTokenSize.Y) / 2);
                 TokenSlots.Add(newTokenSlot);
-                _size = new Vector2(TokenManager.Instance.TileSize.X, TokenManager.Instance.TileSize.Y);
+                _size = new Vector2(ClientTokenManager.Instance.TileSize.X, ClientTokenManager.Instance.TileSize.Y);
             }
             else
             {
@@ -95,10 +95,10 @@ namespace Models.GameplayObjects
                 newTokenSlot.RenderPosition = _position;
                 TokenSlots.Add(newTokenSlot);
                 newTokenSlot = new tokenSlot();
-                newTokenSlot.RenderPosition.X = _position.X + TokenManager.Instance.PlayerTokenSize.X;
+                newTokenSlot.RenderPosition.X = _position.X + ClientTokenManager.Instance.PlayerTokenSize.X;
                 newTokenSlot.RenderPosition.Y = _position.Y;
                 TokenSlots.Add(newTokenSlot);
-                _size = new Vector2(TokenManager.Instance.TileSize.X, TokenManager.Instance.TileSize.Y);
+                _size = new Vector2(ClientTokenManager.Instance.TileSize.X, ClientTokenManager.Instance.TileSize.Y);
             }
         }
 

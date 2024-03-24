@@ -1,7 +1,7 @@
 ﻿
 using Greet;
 
-namespace Clue_Less_Server.Managers
+namespace Managers
 {
     public class NotificationManager
     {
@@ -20,7 +20,7 @@ namespace Clue_Less_Server.Managers
         {            
             //We handle globals before we handle specific player queue stuff.
             //One message out per heartbeat.            
-            if(PlayerNotificationQueue.ContainsKey(playerId))
+            if (PlayerNotificationQueue.ContainsKey(playerId))
             {
                 HeartbeatResponse playerResponse = new HeartbeatResponse();
                 

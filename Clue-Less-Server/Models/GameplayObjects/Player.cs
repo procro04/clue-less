@@ -1,6 +1,5 @@
-﻿using Clue_Less.Models.GameplayObjects;
-using Clue_Less_Server.Managers;
-using Greet;
+﻿using Greet;
+using Managers;
 using System.Numerics;
 
 namespace Models.GameplayObjects

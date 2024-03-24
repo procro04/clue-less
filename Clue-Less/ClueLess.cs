@@ -8,6 +8,7 @@ using Managers;
 using System.Diagnostics;
 using Services;
 using System.Timers;
+using System.Linq;
 
 
 namespace Clue_Less
@@ -77,9 +78,15 @@ namespace Clue_Less
         private static void PerformHeartbeat(object source,  ElapsedEventArgs e)
         {
             var response = ClientGRPCService.Instance.Heartbeat();
-            if(response.Response == Greet.ServerHeartbeatResponse.StartGame)
+            if (response.Response == Greet.ServerHeartbeatResponse.StartGame)
             {
-                TokenManager.Instance.StartGame(response.StartGame);                
+                ClientTokenManager.Instance.StartGame(response.StartGame);
+            }
+
+            if (response.Response == Greet.ServerHeartbeatResponse.CurrentTurn)
+            {
+                var player = ClientTokenManager.Instance.ClientPlayers.FirstOrDefault(x => x.PlayerId == response.CurrentTurn.PlayerId);
+                ClientMenuManager.Instance.ShowNotification($"Currently {player.AssignedToken.Name}'s turn!");
             }
         }
 
@@ -91,9 +98,9 @@ namespace Clue_Less
 
             // TODO: Add your drawing code here
             ClientBoardManager.Instance.Draw(gameTime);
-            if (MenuManager.Instance.GameInstanceStarted)
+            if (ClientMenuManager.Instance.GameInstanceStarted)
             {
-                TokenManager.Instance.Draw(gameTime);
+                ClientTokenManager.Instance.Draw(gameTime);
             }            
                         
             base.Draw(gameTime);

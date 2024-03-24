@@ -74,7 +74,7 @@ namespace Managers
             }
 
             //Draw our menu in the correct place relative to the tiles.
-            MenuManager.Instance.Draw(gameTime);
+            ClientMenuManager.Instance.Draw(gameTime);
         }
 
         public void InitalizeBoardTiles()
@@ -191,8 +191,8 @@ namespace Managers
             currentPos.X += kitchenTex.Width;
             currentPos.Y += kitchenTex.Height;
 
-            MenuManager.Instance.SetBottomAnchorPosition(BottomMenuPosition);
-            MenuManager.Instance.SetTopAnchorPosition(TopMenuPosition);
+            ClientMenuManager.Instance.SetBottomAnchorPosition(BottomMenuPosition);
+            ClientMenuManager.Instance.SetTopAnchorPosition(TopMenuPosition);
 
         }
     }

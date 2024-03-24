@@ -21,22 +21,29 @@ enum ServerHeartbeatResponse{
     NoPendingMessages = 1;
     StartGame = 2;
     GlobalPlayerNotification = 3;
+    CurrentTurn = 4;
 }
 
-message HeartbeatRequest{
+message HeartbeatRequest {
     int32 playerId = 1;
 }
 
-message StartGameResponse{
+message StartGameResponse {
     repeated int32 playerId = 1;
     repeated Location playerLocation = 2;
     repeated PlayerCharacterOptions playerCharacter = 3;
 }
 
-message HeartbeatResponse{
+message CurrentTurnResponse {
+    int32 playerId = 1;
+    repeated Location playerLocation = 2;
+}
+
+message HeartbeatResponse {
     ServerHeartbeatResponse response = 1;
     optional GlobalPlayerNotificationResponse globalPlayerNotification= 2;
     optional StartGameResponse startGame = 3;
+    optional CurrentTurnResponse currentTurn = 4;
 }
 
 message PlayerTurnOrderResult
@@ -45,7 +52,7 @@ message PlayerTurnOrderResult
     repeated int32 playerIdsInOrder = 2;
 }
 
-message LoginRequest{
+message LoginRequest {
     string name = 1;
     PlayerCharacterOptions character = 2;
 }
@@ -186,11 +193,4 @@ enum Location {
     MrsWhiteHomeSquare = 25;
     MrGreenHomeSquare = 26;
     Invalid = 27;
-}
-
-enum MenuOptionEnum {
-    StartNewGame = 0;
-    JoinGame = 1;
-    MakeSuggestion = 2;
-    MakeAccusation = 3;
 }

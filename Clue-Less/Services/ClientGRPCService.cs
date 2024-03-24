@@ -37,18 +37,6 @@ namespace Services
             });
         }
 
-        public List<int> GetPlayerTurnOrder()
-        {
-            var result = networkService.GetPlayerTurnOrder(new Empty());
-            List<int> playerOrder = new List<int>();
-            foreach (int player in result.PlayerIdsInOrder)
-            {
-                playerOrder.Add(player);
-            }
-
-            return playerOrder;
-        }
-
         public void StartGame()
         {
             networkService.StartGame(new Empty());
@@ -77,9 +65,9 @@ namespace Services
 
         public HeartbeatResponse Heartbeat()
         {
-            if(TokenManager.Instance.LoggedInPlayer != null)
+            if (ClientTokenManager.Instance.LoggedInPlayer != null)
             {
-                return networkService.Heartbeat(new HeartbeatRequest { PlayerId = TokenManager.Instance.LoggedInPlayer.PlayerId });
+                return networkService.Heartbeat(new HeartbeatRequest { PlayerId = ClientTokenManager.Instance.LoggedInPlayer.PlayerId });
             }
             return new HeartbeatResponse { Response = ServerHeartbeatResponse.NoPendingMessages };
         }
