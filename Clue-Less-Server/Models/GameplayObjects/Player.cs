@@ -1,4 +1,5 @@
 ﻿using Clue_Less.Models.GameplayObjects;
+using Clue_Less_Server.Managers;
 using Greet;
 using System.Numerics;
 
@@ -11,6 +12,7 @@ namespace Models.GameplayObjects
             Name = name;
             PlayerId = playerId;            
             Character = character;
+            NotificationManager.Instance.NewQueueForPlayer(PlayerId);
         }
 
         public string Name { get; set; }

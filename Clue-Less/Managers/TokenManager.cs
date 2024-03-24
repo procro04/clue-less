@@ -20,11 +20,14 @@ namespace Managers
         }
 
         public Point PlayerTokenSize = new Point(50, 50);
+        public Point HomeSquareSize = new Point(60, 60);
+        public Point TileSize = new Point(200, 200);
         private Point WeaponTokenSize = new Point(50, 50);
+        
 
         public List<ClientWeapon> ClientWeapons = new List<ClientWeapon>();
         public List<ClientPlayer> ClientPlayers = new List<ClientPlayer>();
-        public List<ClientToken> AvailableTokens = new List<ClientToken>();
+        public List<ClientToken> AvailableTokens = new List<ClientToken>();        
         public ClientPlayer LoggedInPlayer = null;
 
         public bool AttemptLogin(string username, PlayerCharacterOptions character)
@@ -43,6 +46,32 @@ namespace Managers
                 return true;
             }
             return false;            
+        }
+
+        public void StartGame(Greet.StartGameResponse startGameMessage)
+        {
+            int numberOfPlayers = startGameMessage.PlayerId.Count;
+            for(int i = 0; i < numberOfPlayers; i++)
+            {
+                var playerId = startGameMessage.PlayerId[i];
+                var playerLocation = startGameMessage.PlayerLocation[i];
+                var playerCharacter = startGameMessage.PlayerCharacter[i];
+                if(playerId != LoggedInPlayer.PlayerId)
+                {
+                    AssignPlayer(playerId, playerCharacter);
+                }
+                MovePlayer(playerId, playerLocation);
+            }
+        }
+
+        public bool AttemptLoginFakePlayers(string username, PlayerCharacterOptions character)
+        {
+            var result = ClientGRPCService.Instance.AttemptLogin(username, character);
+            if (result.Success)
+            {
+                return true;
+            }
+            return false;
         }
 
         public List<int> GetPlayerTurnOrder()
@@ -77,12 +106,12 @@ namespace Managers
         {
             AvailableTokens = new List<ClientToken>
             {
-                new ClientToken { Name = "Mrs. Peacock", TokenId = 1, TokenValue = PlayerCharacterOptions.MrsPeacock, CurrentLocation = Location.HallwayEight, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_peacock_token") },
-                new ClientToken { Name = "Professor Plum", TokenId = 2, TokenValue = PlayerCharacterOptions.ProfessorPlum, CurrentLocation = Location.HallwayThree, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/prof_plum_token") },
-                new ClientToken { Name = "Miss Scarlet", TokenId = 3, TokenValue = PlayerCharacterOptions.MissScarlet, CurrentLocation = Location.HallwayTwo, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_scarlet_token") },
-                new ClientToken { Name = "Col. Mustard", TokenId = 4, TokenValue = PlayerCharacterOptions.ColMustard, CurrentLocation = Location.HallwayFive, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/col_mustard_token") },
-                new ClientToken { Name = "Mrs. White", TokenId = 5, TokenValue = PlayerCharacterOptions.MrsWhite, CurrentLocation = Location.HallwayTwelve, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
-                new ClientToken { Name = "Mr. Green", TokenId = 6, TokenValue = PlayerCharacterOptions.MrGreen, CurrentLocation = Location.HallwayEleven, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/mr_green_token") }
+                new ClientToken { Name = "Mrs. Peacock", TokenId = 1, TokenValue = PlayerCharacterOptions.MrsPeacock, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_peacock_token") },
+                new ClientToken { Name = "Professor Plum", TokenId = 2, TokenValue = PlayerCharacterOptions.ProfessorPlum, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/prof_plum_token") },
+                new ClientToken { Name = "Miss Scarlet", TokenId = 3, TokenValue = PlayerCharacterOptions.MissScarlet, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_scarlet_token") },
+                new ClientToken { Name = "Col. Mustard", TokenId = 4, TokenValue = PlayerCharacterOptions.ColMustard, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/col_mustard_token") },
+                new ClientToken { Name = "Mrs. White", TokenId = 5, TokenValue = PlayerCharacterOptions.MrsWhite, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/miss_white_token") },
+                new ClientToken { Name = "Mr. Green", TokenId = 6, TokenValue = PlayerCharacterOptions.MrGreen, CurrentLocation = Location.Invalid, Texture = Globals.Instance.Content.Load<Texture2D>("gametokens/mr_green_token") }
             };
         }
 
@@ -140,7 +169,10 @@ namespace Managers
             Globals.Instance.SpriteBatch.Begin();
             foreach (var player in ClientPlayers)
             {
-                Globals.Instance.SpriteBatch.Draw(player.AssignedToken.Texture, new Rectangle((int)player.AssignedToken.RenderPosition.X, (int)player.AssignedToken.RenderPosition.Y, PlayerTokenSize.X, PlayerTokenSize.Y) , Color.White);
+                if (player.AssignedToken.CurrentLocation != Location.Invalid)
+                {
+                    Globals.Instance.SpriteBatch.Draw(player.AssignedToken.Texture, new Rectangle((int)player.AssignedToken.RenderPosition.X, (int)player.AssignedToken.RenderPosition.Y, PlayerTokenSize.X, PlayerTokenSize.Y), Color.White);
+                }                
             }
             Globals.Instance.SpriteBatch.End();
         }

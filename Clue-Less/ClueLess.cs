@@ -6,6 +6,8 @@ using MonoGame.ImGuiNet;
 using Microsoft.Xna.Framework.Audio;
 using Managers;
 using System.Diagnostics;
+using Services;
+using System.Timers;
 
 
 namespace Clue_Less
@@ -22,6 +24,8 @@ namespace Clue_Less
         private Vector2 startingPosition;
         public static ImGuiRenderer GuiRenderer;
 
+        System.Timers.Timer heartbeatTimer = new System.Timers.Timer();
+
         public ClueLess()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,7 +37,7 @@ namespace Clue_Less
         {
             //Globals inits
             Globals.Instance.Game = this;
-            Globals.Instance.Bounds = new(1400, 975);
+            Globals.Instance.Bounds = new(1400, 1080);
             Globals.Instance.SpriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.Instance.Content = Content;
 
@@ -44,6 +48,10 @@ namespace Clue_Less
 
             //InitializeMusicAndSound();
             GuiRenderer = new ImGuiRenderer(Globals.Instance.Game);
+
+            heartbeatTimer.Elapsed += new ElapsedEventHandler(PerformHeartbeat);
+            heartbeatTimer.Interval = 500; // half second
+            heartbeatTimer.Enabled = true;
 
             base.Initialize();
         }
@@ -61,8 +69,18 @@ namespace Clue_Less
             {
                 Exit();
             }
+            
 
             base.Update(gameTime);
+        }        
+
+        private static void PerformHeartbeat(object source,  ElapsedEventArgs e)
+        {
+            var response = ClientGRPCService.Instance.Heartbeat();
+            if(response.Response == Greet.ServerHeartbeatResponse.StartGame)
+            {
+                TokenManager.Instance.StartGame(response.StartGame);                
+            }
         }
 
         protected override void Draw(GameTime gameTime)

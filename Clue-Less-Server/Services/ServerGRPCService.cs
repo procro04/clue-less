@@ -51,6 +51,12 @@ namespace Clue_Less_Server.Services
             });
         }
 
+        public override Task<HeartbeatResponse> Heartbeat(HeartbeatRequest request, ServerCallContext context)
+        {
+            Console.WriteLine("Server gRPC call Heartbeat from player " + request.PlayerId);
+            return Task.FromResult(NotificationManager.Instance.Heartbeat(request.PlayerId));
+        }
+
         public override Task<LoginReply> AttemptLogin(LoginRequest request, ServerCallContext context)
         {
             Console.WriteLine("Server gRPC call Attempt Login! " + request.Name + " " + request.Character.ToString());

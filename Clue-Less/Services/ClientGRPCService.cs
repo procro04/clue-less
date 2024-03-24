@@ -1,8 +1,8 @@
-﻿using Clue_Less;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using System;
 using Greet;
 using System.Collections.Generic;
+using Managers;
 
 namespace Services
 {
@@ -73,6 +73,15 @@ namespace Services
         public string SayHello(string message)
         {
             return networkService.SayHello(new HelloRequest { Name = message }).Message;
+        }
+
+        public HeartbeatResponse Heartbeat()
+        {
+            if(TokenManager.Instance.LoggedInPlayer != null)
+            {
+                return networkService.Heartbeat(new HeartbeatRequest { PlayerId = TokenManager.Instance.LoggedInPlayer.PlayerId });
+            }
+            return new HeartbeatResponse { Response = ServerHeartbeatResponse.NoPendingMessages };
         }
     }
 }

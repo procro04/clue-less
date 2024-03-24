@@ -1,10 +1,9 @@
 ﻿using ImGuiNET;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Xna.Framework;
-using Models.GameplayObjects;
 using Services;
 using System;
 using System.Diagnostics;
+using Greet;
 
 
 namespace Managers
@@ -116,15 +115,24 @@ namespace Managers
                     }
                     if (ImGui.Button("Initialize Fake Players Bob and George"))
                     {
-                        TokenManager.Instance.AttemptLogin("Bob", Greet.PlayerCharacterOptions.MrGreen);
-                        TokenManager.Instance.AttemptLogin("George", Greet.PlayerCharacterOptions.MrsWhite);                        
-                    }  
-                    
+                        TokenManager.Instance.AttemptLoginFakePlayers("Bob", PlayerCharacterOptions.MrGreen);
+                        TokenManager.Instance.AttemptLoginFakePlayers("George", PlayerCharacterOptions.MrsWhite);                        
+                    }
+
                     if (GameInstanceStarted)
                     {
-                        foreach (var player in TokenManager.Instance.ClientPlayers)
+                        //Ingame UI goes here
+                        if (ImGui.Button("Test, Move LocalPlayer to Hallway 3"))
                         {
-                            TokenManager.Instance.MovePlayer(player.PlayerId, player.AssignedToken.CurrentLocation);
+                            TokenManager.Instance.MovePlayer(TokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayThree);
+                        }
+                        if (ImGui.Button("Test, Move LocalPlayer to Hallway 2"))
+                        {
+                            TokenManager.Instance.MovePlayer(TokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayTwo);
+                        }
+                        if (ImGui.Button("Test, Move LocalPlayer to Hallway 5"))
+                        {
+                            TokenManager.Instance.MovePlayer(TokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayFive);
                         }
                     }
                 }
@@ -137,26 +145,26 @@ namespace Managers
             if (ImGui.Button("Move Us (Current Player) to HallwayOne"))
             {
                 Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
-                TokenManager.Instance.MovePlayer(1, ClientGRPCService.Instance.MovePlayerLocation(1, Greet.Location.HallwayOne));
+                TokenManager.Instance.MovePlayer(1, ClientGRPCService.Instance.MovePlayerLocation(1, Location.HallwayOne));
                 Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
             }
 
             ImGui.Text("Move Player 2(Bob)! \n");
             if (ImGui.Button("Move (Bob) MrGreen to HallwayOne"))
             {
-                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayOne));
+                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Location.HallwayOne));
             }
             ImGui.Text("Move Player 3(George)! \n");
             if (ImGui.Button("Move (George) MrsWhite to HallwayThree"))
             {
                 Debug.WriteLine("Begin Client side GRPC request to Validation Mgr on Server - Valid Player Action");
-                TokenManager.Instance.MovePlayer(3, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.HallwayThree));
+                TokenManager.Instance.MovePlayer(3, ClientGRPCService.Instance.MovePlayerLocation(2, Location.HallwayThree));
                 Debug.WriteLine("End Client side GRPC request to Validation Mgr on Server - Valid Player Action");
             }
 
             if (ImGui.Button("Move Player 2(Bob) to Kitchen"))
             {
-                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Greet.Location.Kitchen));
+                TokenManager.Instance.MovePlayer(2, ClientGRPCService.Instance.MovePlayerLocation(2, Location.Kitchen));
             }
 
             ImGui.Text("Make A Move! \n");

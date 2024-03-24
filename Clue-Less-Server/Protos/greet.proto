@@ -13,7 +13,30 @@ service Greeter {
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
   rpc GetSolution(SolutionRequest) returns (SolutionResponse);
   rpc GetPlayerTurnOrder(Empty) returns (PlayerTurnOrderResult);
-    
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);    
+}
+
+enum ServerHeartbeatResponse{
+    Error = 0;
+    NoPendingMessages = 1;
+    StartGame = 2;
+    GlobalPlayerNotification = 3;
+}
+
+message HeartbeatRequest{
+    int32 playerId = 1;
+}
+
+message StartGameResponse{
+    repeated int32 playerId = 1;
+    repeated Location playerLocation = 2;
+    repeated PlayerCharacterOptions playerCharacter = 3;
+}
+
+message HeartbeatResponse{
+    ServerHeartbeatResponse response = 1;
+    optional GlobalPlayerNotificationResponse globalPlayerNotification= 2;
+    optional StartGameResponse startGame = 3;
 }
 
 message PlayerTurnOrderResult
@@ -156,6 +179,13 @@ enum Location {
     Ballroom = 18;
     HallwayTwelve = 19;
     Kitchen = 20;
+    MrsPeacockHomeSquare = 21;
+    ProfessorPlumHomeSquare = 22;
+    MissScarletHomeSquare = 23;
+    ColMustardHomeSquare = 24;
+    MrsWhiteHomeSquare = 25;
+    MrGreenHomeSquare = 26;
+    Invalid = 27;
 }
 
 enum MenuOptionEnum {

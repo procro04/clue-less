@@ -1,4 +1,5 @@
-﻿using Greet;
+﻿using Clue_Less_Server.Managers;
+using Greet;
 using Models.GameplayObjects;
 
 namespace Managers
@@ -20,6 +21,62 @@ namespace Managers
         {
             GenerateSolution();            
             DealCards();
+            MovePlayersToStartingPositions();
+            
+            //Tell all players all player locations as well as the fact that the game has started.
+            HeartbeatResponse startGameResponse = new HeartbeatResponse();
+            startGameResponse.Response = ServerHeartbeatResponse.StartGame;
+            startGameResponse.StartGame = new StartGameResponse();
+            Console.WriteLine($"StartGame!");
+            foreach (var player in playerList)
+            {
+                startGameResponse.StartGame.PlayerId.Add(player.PlayerId);
+                startGameResponse.StartGame.PlayerLocation.Add(player.PlayerLocation);
+                startGameResponse.StartGame.PlayerCharacter.Add(player.Character);
+                Console.WriteLine($"Player {player.PlayerId} is playing {player.Character}, starting at location {player.PlayerLocation}");
+            }
+            
+            NotificationManager.Instance.SendGlobalMessage(startGameResponse);
+        }
+
+        private void MovePlayersToStartingPositions()
+        {
+            foreach (var player in playerList)
+            {
+                switch(player.Character)
+                {
+                    case PlayerCharacterOptions.MrsPeacock:
+                        {
+                            player.PlayerLocation = Location.MrsPeacockHomeSquare;
+                        }
+                        break;
+                    case PlayerCharacterOptions.ProfessorPlum:
+                        {
+                            player.PlayerLocation = Location.ProfessorPlumHomeSquare;
+                        }
+                        break;
+                    case PlayerCharacterOptions.MissScarlet:
+                        {
+                            player.PlayerLocation = Location.MissScarletHomeSquare;
+                        }
+                        break;
+                    case PlayerCharacterOptions.ColMustard:
+                        {
+                            player.PlayerLocation = Location.ColMustardHomeSquare;
+                        }
+                        break;
+                    case PlayerCharacterOptions.MrsWhite:
+                        {
+                            player.PlayerLocation = Location.MrsWhiteHomeSquare;
+                        }
+                        break;
+                    case PlayerCharacterOptions.MrGreen:
+                        {
+                            player.PlayerLocation = Location.MrGreenHomeSquare;
+                        }
+                        break;
+                }
+            }
         }
 
         private void DealCards()
@@ -120,7 +177,7 @@ namespace Managers
             {
                 var newPlayer = new Player(playerName, playerIdCounter++, character);
                 LoginResult.PlayerId = newPlayer.PlayerId;
-                playerList.Add(newPlayer);
+                playerList.Add(newPlayer);                
             }
             return LoginResult;
         }
