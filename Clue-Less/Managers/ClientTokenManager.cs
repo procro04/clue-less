@@ -106,12 +106,12 @@ namespace Managers
             {
                 if (player.PlayerId == playerId)
                 {                    
-                    if(!RemovePlayer(playerId))
+                    if (!RemovePlayer(playerId))
                     {
                         //Handle false case here.
                     }
-                    //You'll need to add a function, or modify move player, to remove the player from their old position.
-                    //i'd probably make it a seperate function.
+                    //need to add a function, or modify move player, to remove the player from their old position.
+                    //probably make it a seperate function.
                     player.AssignedToken.RenderPosition = ClientBoardManager.Instance.MovePlayer(playerId, moveToLocation);
                     player.AssignedToken.CurrentLocation = moveToLocation;
                 }

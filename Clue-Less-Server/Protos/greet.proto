@@ -13,6 +13,7 @@ service Greeter {
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
   rpc GetSolution(SolutionRequest) returns (SolutionResponse);
   rpc GetPlayerTurnOrder(Empty) returns (PlayerTurnOrderResult);
+  rpc AdvancePlayerTurn(AdvancePlayerTurnRequest) returns (AdvancePlayerTurnResponse);
   rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);    
 }
 
@@ -39,11 +40,25 @@ message CurrentTurnResponse {
     repeated Location playerLocation = 2;
 }
 
+message ErrorMessageResponse {
+    string message = 1;
+}
+
+message AdvancePlayerTurnResponse {
+    bool success = 1;
+    int32 currentPlayerTurnId = 2;
+}
+
+message AdvancePlayerTurnRequest {
+    int32 playerIdToIncrement = 1;
+}
+
 message HeartbeatResponse {
     ServerHeartbeatResponse response = 1;
     optional GlobalPlayerNotificationResponse globalPlayerNotification= 2;
     optional StartGameResponse startGame = 3;
     optional CurrentTurnResponse currentTurn = 4;
+    optional ErrorMessageResponse errorMessage = 5;
 }
 
 message PlayerTurnOrderResult

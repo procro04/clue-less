@@ -58,11 +58,6 @@ namespace Services
             }).Notification;
         }
 
-        public string SayHello(string message)
-        {
-            return networkService.SayHello(new HelloRequest { Name = message }).Message;
-        }
-
         public HeartbeatResponse Heartbeat()
         {
             if (ClientTokenManager.Instance.LoggedInPlayer != null)
@@ -70,6 +65,11 @@ namespace Services
                 return networkService.Heartbeat(new HeartbeatRequest { PlayerId = ClientTokenManager.Instance.LoggedInPlayer.PlayerId });
             }
             return new HeartbeatResponse { Response = ServerHeartbeatResponse.NoPendingMessages };
+        }
+
+        public AdvancePlayerTurnResponse AdvancePlayerTurn(int currentPlayerIdToIncrement)
+        {
+            return networkService.AdvancePlayerTurn(new AdvancePlayerTurnRequest { PlayerIdToIncrement = currentPlayerIdToIncrement });
         }
     }
 }

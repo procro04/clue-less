@@ -16,6 +16,7 @@ namespace Managers
         {
             PlayerNotificationQueue[playerId] = new Stack<HeartbeatResponse>();
         }
+
         public HeartbeatResponse Heartbeat(int playerId)
         {            
             //We handle globals before we handle specific player queue stuff.
@@ -39,6 +40,14 @@ namespace Managers
             HeartbeatResponse response = new HeartbeatResponse();
             response.Response = ServerHeartbeatResponse.Error; //Player id not registered to the queue            
             return response;
+        }
+
+        public void SendPlayerMessage(int playerId, HeartbeatResponse message)
+        {
+            if (PlayerNotificationQueue.ContainsKey(playerId))
+            {
+                PlayerNotificationQueue[playerId].Push(message);
+            }
         }
 
         public void SendGlobalMessage(HeartbeatResponse message)

@@ -145,12 +145,10 @@ namespace Managers
             var response = ClientGRPCService.Instance.Heartbeat();
             if (!FirstTurnComplete)
             {
-
                 if (ImGui.Button("End Turn"))
                 {
-
+                    ClientGRPCService.Instance.AdvancePlayerTurn(response.CurrentTurn.PlayerId);
                 }
-
             }
             //if (ImGui.Button("Test, Move LocalPlayer to Hallway 3"))
             //{
