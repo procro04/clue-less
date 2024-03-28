@@ -14,7 +14,8 @@ namespace Managers
         private Solution Solution = new Solution();
         Random rng = new Random();
         private Dictionary<Location, List<Location>> BoardMap = new Dictionary<Location, List<Location>>();
-        private int CurrentPlayerTurnId = 0;
+        private Dictionary<Location, List<Location>> SuggestionBoardMap = new Dictionary<Location, List<Location>>();
+        private int CurrentPlayerTurnId = 1;
 
         public BoardManager() {
         }
@@ -25,6 +26,7 @@ namespace Managers
             DealCards();
             MovePlayersToStartingPositions();
             InitializeBoardMap();
+            InitializeSuggestionBoardMap();
             
             //Tell all players all player locations as well as the fact that the game has started.
             HeartbeatResponse startGameResponse = new HeartbeatResponse();
@@ -74,10 +76,24 @@ namespace Managers
             }
         }
 
+        public List<string> GetButtonMovementOptions(int playerId)
+        {
+            var player = PlayerList.First(x => x.PlayerId == playerId);
+            var validLocations = GetValidMoveLocations(player).ToList();
+            var formattedLocations = new List<string>();
+            foreach (var location in validLocations)
+            {
+                formattedLocations.Add(FormatLocationNames(location));
+            }
+
+            return formattedLocations;
+        }
+
         public string FormatLocationNames(Location location)
         {
             switch (location)
             {
+                //Roooms
                 case Location.Ballroom:
                     return "Ballroom";
                 case Location.Billiard:
@@ -96,32 +112,65 @@ namespace Managers
                     return "Lounge";
                 case Location.Study:
                     return "Study";
+
+                //Hallways
+                case Location.HallwayOne:
+                    return "Hallway 1";
+                case Location.HallwayTwo:
+                    return "Hallway 2";
+                case Location.HallwayThree:
+                    return "Hallway 3";
+                case Location.HallwayFour:
+                    return "Hallway 4";
+                case Location.HallwayFive:
+                    return "Hallway 5";
+                case Location.HallwaySix:
+                    return "Hallway 6";
+                case Location.HallwaySeven:
+                    return "Hallway 7";
+                case Location.HallwayEight:
+                    return "Hallway 8";
+                case Location.HallwayNine:
+                    return "Hallway 9";
+                case Location.HallwayTen:
+                    return "Hallway 10";
+                case Location.HallwayEleven:
+                    return "Hallway 11";
+                case Location.HallwayTwelve:
+                    return "Hallway 12";
             }
             return "";
         }
 
-        public List<Location> GetValidMoveLocations(Player player)
+        public List<Location> GetValidMoveLocations(Player player, bool beingMovedForSuggestion = false)
         {
-            var locationsToDelete = new List<Location>();
             var validPlayerLocations = BoardMap.FirstOrDefault(x => x.Key == player.PlayerLocation);
 
-            foreach (var possibleLocation in validPlayerLocations.Value)
+            if (!beingMovedForSuggestion)
             {
-                if (IsHallway(possibleLocation))
+                var locationsToDelete = new List<Location>();
+                foreach (var possibleLocation in validPlayerLocations.Value)
                 {
-                    if (IsOccupied(possibleLocation))
+                    if (IsHallway(possibleLocation))
                     {
-                        locationsToDelete.Add(possibleLocation);
+                        if (IsOccupied(possibleLocation))
+                        {
+                            locationsToDelete.Add(possibleLocation);
+                        }
+                    }
+                }
+
+                if (locationsToDelete.Count > 0)
+                {
+                    foreach (var possibleLocation in locationsToDelete)
+                    {
+                        validPlayerLocations.Value.Remove(possibleLocation);
                     }
                 }
             }
-
-            if (locationsToDelete.Count > 0)
+            else
             {
-                foreach (var possibleLocation in locationsToDelete)
-                {
-                    validPlayerLocations.Value.Remove(possibleLocation);
-                }
+                validPlayerLocations = SuggestionBoardMap.FirstOrDefault(x => x.Key == player.PlayerLocation);
             }
 
             if (validPlayerLocations.Value.Count == 0)
@@ -491,10 +540,9 @@ namespace Managers
 
             BoardMap[Location.HallwayNine] = new List<Location>
             {
-                Location.Billiard
+                Location.Billiard,
+                Location.Ballroom
             };
-;
-            BoardMap[Location.HallwayNine].Add(Location.Ballroom);
 
             BoardMap[Location.HallwayTen] = new List<Location>
             {
@@ -504,11 +552,10 @@ namespace Managers
 
             BoardMap[Location.Conservatory] = new List<Location>
             {
-                Location.HallwayEight
+                Location.HallwayEight,
+                Location.HallwayEleven,
+                Location.Lounge
             };
-;
-            BoardMap[Location.Conservatory].Add(Location.HallwayEleven);
-            BoardMap[Location.Conservatory].Add(Location.Lounge);
 
             BoardMap[Location.HallwayEleven] = new List<Location>
             {
@@ -518,12 +565,11 @@ namespace Managers
 
             BoardMap[Location.Ballroom] = new List<Location>
             {
-                Location.HallwayNine
+                Location.HallwayNine,
+                Location.HallwayEleven,
+                Location.HallwayTwelve
             };
 ;
-            BoardMap[Location.Ballroom].Add(Location.HallwayEleven);
-            BoardMap[Location.Ballroom].Add(Location.HallwayTwelve);
-
             BoardMap[Location.HallwayTwelve] = new List<Location>
             {
                 Location.Kitchen,
@@ -536,6 +582,32 @@ namespace Managers
                 Location.HallwayTen,
                 Location.Study
             };
+        }
+
+        private void InitializeSuggestionBoardMap()
+        {
+            //You can go to any room from any other room if you are being dragged there.
+            var roomList = new List<Location>
+            { 
+                Location.Billiard,
+                Location.Ballroom,
+                Location.ConcertHall,
+                Location.Conservatory,
+                Location.DiningRoom,
+                Location.Kitchen,
+                Location.Library,
+                Location.Lounge,
+                Location.Study
+            };
+
+            BoardMap[Location.Study] = roomList;
+            BoardMap[Location.ConcertHall] = roomList;
+            BoardMap[Location.Lounge] = roomList;
+            BoardMap[Location.Library] = roomList;
+            BoardMap[Location.Billiard] = roomList;
+            BoardMap[Location.Conservatory] = roomList;
+            BoardMap[Location.Ballroom] = roomList;
+            BoardMap[Location.Kitchen] = roomList;
         }
 
         private List<Location> GetHallwayLocations()

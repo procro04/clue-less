@@ -3,6 +3,7 @@ using System;
 using Greet;
 using System.Collections.Generic;
 using Managers;
+using System.Linq;
 
 namespace Services
 {
@@ -35,6 +36,18 @@ namespace Services
                 Name = username,
                 Character = character
             });
+        }
+
+        public List<int> GetPlayerTurnOrder()
+        {
+            var result = networkService.GetPlayerTurnOrder(new Empty());
+            List<int> playerOrder = new List<int>();
+            foreach (int player in result.PlayerIdsInOrder)
+            {
+                playerOrder.Add(player);
+            }
+
+            return playerOrder;
         }
 
         public void StartGame()
@@ -70,6 +83,11 @@ namespace Services
         public void AdvancePlayerTurn()
         {
             networkService.AdvancePlayerTurn(new Empty());
+        }
+
+        public List<string> GetMovementButtonOptions(int playerId)
+        {
+            return networkService.GetMovementButtonOptions(new MovementButtonRequest { PlayerId = playerId }).ButtonOptions.ToList();
         }
     }
 }

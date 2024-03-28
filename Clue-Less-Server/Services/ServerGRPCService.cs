@@ -53,7 +53,7 @@ namespace Clue_Less_Server.Services
         {
             var result = BoardManager.Instance.GetPlayerTurnOrder();
             PlayerTurnOrderResult turnOrder = new PlayerTurnOrderResult();
-            foreach(int playerId in result)
+            foreach (int playerId in result)
             {
                 turnOrder.PlayerIdsInOrder.Add(playerId);
             }            
@@ -63,6 +63,17 @@ namespace Clue_Less_Server.Services
         public override Task<SolutionResponse> GetSolution(SolutionRequest request, ServerCallContext context)
         {
             return Task.FromResult(BoardManager.Instance.GetSolution(request.RequestingPlayerId, request.SuspectedLocation, request.SuspectedCharacter, request.SuspectedWeapon));
+        }
+
+        public override Task<MovementButtonResponse> GetMovementButtonOptions(MovementButtonRequest request, ServerCallContext context)
+        {
+            var result = BoardManager.Instance.GetButtonMovementOptions(request.PlayerId);
+            MovementButtonResponse buttonMovementOptions = new MovementButtonResponse();
+            foreach (string option in result)
+            {
+                buttonMovementOptions.ButtonOptions.Add(option);
+            }
+            return Task.FromResult(buttonMovementOptions);
         }
 
         public override Task<Empty> StartGame(Empty request, ServerCallContext context)

@@ -13,8 +13,9 @@ service Greeter {
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
   rpc GetSolution(SolutionRequest) returns (SolutionResponse);
   rpc GetPlayerTurnOrder(Empty) returns (PlayerTurnOrderResult);
+  rpc GetMovementButtonOptions(MovementButtonRequest) returns (MovementButtonResponse);
   rpc AdvancePlayerTurn(Empty) returns (Empty);
-  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);    
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse); 
 }
 
 enum ServerHeartbeatResponse{
@@ -51,6 +52,14 @@ message AdvancePlayerTurnResponse {
 
 message AdvancePlayerTurnRequest {
     int32 playerIdToIncrement = 1;
+}
+
+message MovementButtonRequest {
+    int32 playerId = 1;
+}
+
+message MovementButtonResponse {
+    repeated string buttonOptions = 1;
 }
 
 message HeartbeatResponse {

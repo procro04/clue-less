@@ -148,6 +148,29 @@ namespace Managers
 
         public void DisplayGameMenus()
         {
+            if (ImGui.Button("Move"))
+            {
+                var movementOptions = ClientGRPCService.Instance.GetMovementButtonOptions(CurrentPlayerTurnId);
+
+                foreach (var option in movementOptions)
+                {
+                    if (ImGui.Button("Move to " + option))
+                    {
+                        //ClientTokenManager.Instance.MovePlayer(CurrentPlayerTurnId, option);
+                    }
+                }
+            }
+
+            if (ImGui.Button("Make Suggestion"))
+            {
+
+            }
+
+            if (ImGui.Button("Make Accusation"))
+            {
+
+            }
+
             if (ImGui.Button("End Turn"))
             {
                 ClientGRPCService.Instance.AdvancePlayerTurn();
