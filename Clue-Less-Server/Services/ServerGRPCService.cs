@@ -67,9 +67,9 @@ namespace Clue_Less_Server.Services
 
         public override Task<MovementButtonResponse> GetMovementButtonOptions(MovementButtonRequest request, ServerCallContext context)
         {
-            var result = BoardManager.Instance.GetButtonMovementOptions(request.PlayerId);
+            var result = BoardManager.Instance.GetValidMoveLocations(BoardManager.Instance.GetPlayerFromId(request.PlayerId));
             MovementButtonResponse buttonMovementOptions = new MovementButtonResponse();
-            foreach (string option in result)
+            foreach (var option in result)
             {
                 buttonMovementOptions.ButtonOptions.Add(option);
             }

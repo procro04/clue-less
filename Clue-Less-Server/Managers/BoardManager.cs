@@ -56,9 +56,15 @@ namespace Managers
             return true;
         }
 
-        public Location MovePlayer(int playerId, Location moveToPosition)
+        public Player GetPlayerFromId(int playerId)
         {
             var player = PlayerList.First(x => x.PlayerId == playerId);
+            return player;
+        }
+
+        public Location MovePlayer(int playerId, Location moveToPosition)
+        {
+            var player = GetPlayerFromId(playerId);
 
             if (!ValidMoveRequest(player, moveToPosition))
             {
@@ -72,74 +78,9 @@ namespace Managers
             }
             else
             {
+                player.PlayerLocation = moveToPosition;
                 return moveToPosition;
             }
-        }
-
-        public List<string> GetButtonMovementOptions(int playerId)
-        {
-            var player = PlayerList.First(x => x.PlayerId == playerId);
-            var validLocations = GetValidMoveLocations(player).ToList();
-            var formattedLocations = new List<string>();
-            foreach (var location in validLocations)
-            {
-                formattedLocations.Add(FormatLocationNames(location));
-            }
-
-            return formattedLocations;
-        }
-
-        public string FormatLocationNames(Location location)
-        {
-            switch (location)
-            {
-                //Roooms
-                case Location.Ballroom:
-                    return "Ballroom";
-                case Location.Billiard:
-                    return "Billiard Room";
-                case Location.ConcertHall:
-                    return "Concert Hall";
-                case Location.Conservatory:
-                    return "Conservatory";
-                case Location.DiningRoom:
-                    return "Dining Room";
-                case Location.Kitchen:
-                    return "Kitchen";
-                case Location.Library:
-                    return "Library";
-                case Location.Lounge:
-                    return "Lounge";
-                case Location.Study:
-                    return "Study";
-
-                //Hallways
-                case Location.HallwayOne:
-                    return "Hallway 1";
-                case Location.HallwayTwo:
-                    return "Hallway 2";
-                case Location.HallwayThree:
-                    return "Hallway 3";
-                case Location.HallwayFour:
-                    return "Hallway 4";
-                case Location.HallwayFive:
-                    return "Hallway 5";
-                case Location.HallwaySix:
-                    return "Hallway 6";
-                case Location.HallwaySeven:
-                    return "Hallway 7";
-                case Location.HallwayEight:
-                    return "Hallway 8";
-                case Location.HallwayNine:
-                    return "Hallway 9";
-                case Location.HallwayTen:
-                    return "Hallway 10";
-                case Location.HallwayEleven:
-                    return "Hallway 11";
-                case Location.HallwayTwelve:
-                    return "Hallway 12";
-            }
-            return "";
         }
 
         public List<Location> GetValidMoveLocations(Player player, bool beingMovedForSuggestion = false)
@@ -600,14 +541,14 @@ namespace Managers
                 Location.Study
             };
 
-            BoardMap[Location.Study] = roomList;
-            BoardMap[Location.ConcertHall] = roomList;
-            BoardMap[Location.Lounge] = roomList;
-            BoardMap[Location.Library] = roomList;
-            BoardMap[Location.Billiard] = roomList;
-            BoardMap[Location.Conservatory] = roomList;
-            BoardMap[Location.Ballroom] = roomList;
-            BoardMap[Location.Kitchen] = roomList;
+            SuggestionBoardMap[Location.Study] = roomList;
+            SuggestionBoardMap[Location.ConcertHall] = roomList;
+            SuggestionBoardMap[Location.Lounge] = roomList;
+            SuggestionBoardMap[Location.Library] = roomList;
+            SuggestionBoardMap[Location.Billiard] = roomList;
+            SuggestionBoardMap[Location.Conservatory] = roomList;
+            SuggestionBoardMap[Location.Ballroom] = roomList;
+            SuggestionBoardMap[Location.Kitchen] = roomList;
         }
 
         private List<Location> GetHallwayLocations()

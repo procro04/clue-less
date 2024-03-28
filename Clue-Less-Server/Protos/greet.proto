@@ -59,7 +59,7 @@ message MovementButtonRequest {
 }
 
 message MovementButtonResponse {
-    repeated string buttonOptions = 1;
+    repeated Location buttonOptions = 1;
 }
 
 message HeartbeatResponse {

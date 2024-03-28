@@ -85,7 +85,7 @@ namespace Services
             networkService.AdvancePlayerTurn(new Empty());
         }
 
-        public List<string> GetMovementButtonOptions(int playerId)
+        public List<Location> GetMovementButtonOptions(int playerId)
         {
             return networkService.GetMovementButtonOptions(new MovementButtonRequest { PlayerId = playerId }).ButtonOptions.ToList();
         }

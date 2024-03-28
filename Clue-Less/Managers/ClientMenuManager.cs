@@ -35,6 +35,7 @@ namespace Managers
         public Queue<string> MessageQueue = new Queue<string>();
         private bool FirstTurnComplete  = false;
         private int CurrentPlayerTurnId = 0;
+        private bool MoveMode = false;
 
         public void SetBottomAnchorPosition(System.Numerics.Vector2 bottomAnchorPosition)
         {
@@ -147,33 +148,46 @@ namespace Managers
         }
 
         public void DisplayGameMenus()
-        {
-            if (ImGui.Button("Move"))
+        {            
+            if (MoveMode)
             {
                 var movementOptions = ClientGRPCService.Instance.GetMovementButtonOptions(CurrentPlayerTurnId);
 
                 foreach (var option in movementOptions)
                 {
-                    if (ImGui.Button("Move to " + option))
+                    if (ImGui.Button("Move to " + ClientBoardManager.Instance.FormatLocationNames(option)))
                     {
-                        //ClientTokenManager.Instance.MovePlayer(CurrentPlayerTurnId, option);
+                        var location = ClientGRPCService.Instance.MovePlayerLocation(CurrentPlayerTurnId, option);
+                        ClientTokenManager.Instance.MovePlayer(CurrentPlayerTurnId, location);
                     }
                 }
             }
-
-            if (ImGui.Button("Make Suggestion"))
+            else
             {
-
+                if (ImGui.Button("Move"))
+                {
+                    MoveMode = true;
+                }
             }
 
-            if (ImGui.Button("Make Accusation"))
+            if (FirstTurnComplete && CurrentPlayerTurnId == ClientTokenManager.Instance.LoggedInPlayer.PlayerId)
             {
+                if (ImGui.Button("Make Suggestion"))
+                {
 
+                }
+
+                if (ImGui.Button("Make Accusation"))
+                {
+
+                }
             }
 
             if (ImGui.Button("End Turn"))
             {
                 ClientGRPCService.Instance.AdvancePlayerTurn();
+                FirstTurnComplete = true;
+                MoveMode = false;
             }
         }
 
