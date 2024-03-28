@@ -18,7 +18,6 @@ namespace Managers
 
         private const int BOARD_PADDING = 2;
         private List<ClientBoardTile> Tiles { get; } = new List<ClientBoardTile>();
-        public List<ClientHomeSquare> HomeSquares = new List<ClientHomeSquare>();
 
         public ClientBoardManager()
         {
@@ -79,17 +78,7 @@ namespace Managers
 
         public void InitalizeBoardTiles()
         {
-            HomeSquares = new List<ClientHomeSquare>
-            {
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissPeacockHomeSquare") },
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/ProfPeacockHomeSquare") }, //haha rip wrong name, right color
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissScarletHomeSquare") },
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/ColMustardHomeSquare") },
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissWhiteHomeSquare") },
-                new ClientHomeSquare { Texture = Globals.Instance.Content.Load<Texture2D>("gameobjects/MrGreenHomeSquare") }
-            };
-
-
+            //Individual Rooms
             var ballroomTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/ballroom");
             var billiardTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/billiard");
             var concertHallTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/concert_hall");
@@ -99,94 +88,106 @@ namespace Managers
             var libraryTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/library");
             var loungeTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/lounge");
             var studyTex = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/study");
-            var hallwayTexVert = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway_vertical");
-            var hallwayTexHoriz = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway_horizontal");
 
-            var MissPeacockHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissPeacockHomeSquare");
-            var ProfessorHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/ProfPeacockHomeSquare"); //haha rip wrong name, right color
-            var MissScarletHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissScarletHomeSquare");
-            var ColMustardHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/ColMustardHomeSquare");
-            var MissWhiteHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissWhiteHomeSquare");
-            var MrGreenHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MrGreenHomeSquare");
+            //Home Squares
+            var missPeacockHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissPeacockHomeSquare");
+            var professorHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/ProfPeacockHomeSquare"); //haha rip wrong name, right color this is prof plum.
+            var missScarletHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissScarletHomeSquare");
+            var colMustardHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/ColMustardHomeSquare");
+            var missWhiteHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MissWhiteHomeSquare");
+            var mrGreenHomeSquareTex = Globals.Instance.Content.Load<Texture2D>("gameobjects/MrGreenHomeSquare");
 
+            //Hallways
+            var hallwayOne = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway1");
+            var hallwayTwo = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway2");
+            var hallwayThree = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway3");
+            var hallwayFour = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway4");
+            var hallwayFive = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway5");
+            var hallwaySix = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway6");
+            var hallwaySeven = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway7");
+            var hallwayEight= Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway8");
+            var hallwayNine = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway9");
+            var hallwayTen = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway10");
+            var hallwayEleven = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway11");
+            var hallwayTwelve = Globals.Instance.Content.Load<Texture2D>("gameroomslabeled/hallway12");
 
             var startingPos = new System.Numerics.Vector2(BOARD_PADDING, BOARD_PADDING);
             var currentPos = startingPos;
             //First row of rooms
             Tiles.Add(new ClientBoardTile(studyTex, currentPos, Location.Study));
             currentPos.X += studyTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayOne, HorizontalHallway: true));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwayOne, currentPos, Location.HallwayOne, HorizontalHallway: true));
+            currentPos.X += hallwayOne.Width;
             Tiles.Add(new ClientBoardTile(concertHallTex, currentPos, Location.ConcertHall));
             currentPos.X += concertHallTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayTwo, HorizontalHallway: true));
-            Tiles.Add(new ClientBoardTile(MissScarletHomeSquareTex, currentPos, Location.MissScarletHomeSquare, HorizontalHallwayHomeSquare:true));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwayTwo, currentPos, Location.HallwayTwo, HorizontalHallway: true));
+            Tiles.Add(new ClientBoardTile(missScarletHomeSquareTex, currentPos, Location.MissScarletHomeSquare, HorizontalHallwayHomeSquare:true));
+            currentPos.X += hallwayTwo.Width;
             Tiles.Add(new ClientBoardTile(loungeTex, currentPos, Location.Lounge));
-            currentPos.X += hallwayTexHoriz.Width;
+            currentPos.X += hallwayTwo.Width;
             TopMenuPosition.X = currentPos.X;
             TopMenuPosition.Y = currentPos.Y;
 
             //Second row
-            currentPos.Y += hallwayTexVert.Height;
+            currentPos.Y += hallwayThree.Height;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayThree, VerticalHallway: true));
-            Tiles.Add(new ClientBoardTile(ProfessorHomeSquareTex, currentPos, Location.ProfessorPlumHomeSquare, VerticalHallwayHomeSquare: true));
-            currentPos.X += hallwayTexVert.Width;
+            Tiles.Add(new ClientBoardTile(hallwayThree, currentPos, Location.HallwayThree, VerticalHallway: true));
+            Tiles.Add(new ClientBoardTile(professorHomeSquareTex, currentPos, Location.ProfessorPlumHomeSquare, VerticalHallwayHomeSquare: true));
+            currentPos.X += hallwayThree.Width;
             //Skip one spot
-            currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayFour, VerticalHallway: true));
-            currentPos.X += hallwayTexVert.Width;
+            currentPos.X += hallwayFour.Width;
+            Tiles.Add(new ClientBoardTile(hallwayFour, currentPos, Location.HallwayFour, VerticalHallway: true));
+            currentPos.X += hallwayFour.Width;
             //Skip one spot
-            currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayFive, VerticalHallway: true));
-            Tiles.Add(new ClientBoardTile(ColMustardHomeSquareTex, currentPos, Location.ColMustardHomeSquare, outSide:true,  VerticalHallwayHomeSquare: true));
+            currentPos.X += hallwayFive.Width;
+            Tiles.Add(new ClientBoardTile(hallwayFive, currentPos, Location.HallwayFive, VerticalHallway: true));
+            Tiles.Add(new ClientBoardTile(colMustardHomeSquareTex, currentPos, Location.ColMustardHomeSquare, outSide:true,  VerticalHallwayHomeSquare: true));
 
             //Third Row
-            currentPos.Y += hallwayTexHoriz.Height;
+            currentPos.Y += hallwaySix.Height;
             currentPos.X = startingPos.X;
             Tiles.Add(new ClientBoardTile(libraryTex, currentPos, Location.Library));
             currentPos.X += libraryTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwaySix));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwaySix, currentPos, Location.HallwaySix));
+            currentPos.X += hallwaySix.Width;
             Tiles.Add(new ClientBoardTile(billiardTex, currentPos, Location.Billiard));
             currentPos.X += billiardTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwaySeven));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwaySeven, currentPos, Location.HallwaySeven));
+            currentPos.X += hallwaySeven.Width;
             Tiles.Add(new ClientBoardTile(diningRoomTex, currentPos, Location.DiningRoom));
             currentPos.X += diningRoomTex.Width;
 
             BottomMenuPosition.X = currentPos.X;
 
             //Fourth row
-            currentPos.Y += hallwayTexVert.Height;
+            currentPos.Y += hallwayEight.Height;
             BottomMenuPosition.Y = currentPos.Y;
             currentPos.X = startingPos.X;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayEight));
-            Tiles.Add(new ClientBoardTile(MissPeacockHomeSquareTex, currentPos, Location.MrsPeacockHomeSquare, VerticalHallwayHomeSquare: true));
-            currentPos.X += hallwayTexVert.Width;
+            Tiles.Add(new ClientBoardTile(hallwayEight, currentPos, Location.HallwayEight));
+            Tiles.Add(new ClientBoardTile(missPeacockHomeSquareTex, currentPos, Location.MrsPeacockHomeSquare, VerticalHallwayHomeSquare: true));
+            currentPos.X += hallwayEight.Width;
             //Skip one spot
-            currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayNine));
-            currentPos.X += hallwayTexVert.Width;
+            currentPos.X += hallwayNine.Width;
+            Tiles.Add(new ClientBoardTile(hallwayNine, currentPos, Location.HallwayNine));
+            currentPos.X += hallwayNine.Width;
             //Skip one spot
-            currentPos.X += hallwayTexVert.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexVert, currentPos, Location.HallwayTen));
+            currentPos.X += hallwayTen.Width;
+            Tiles.Add(new ClientBoardTile(hallwayTen, currentPos, Location.HallwayTen));
 
 
             //Fifth Row
-            currentPos.Y += hallwayTexHoriz.Height;
+            currentPos.Y += hallwayEleven.Height;
             currentPos.X = startingPos.X;
             Tiles.Add(new ClientBoardTile(conservatoryTex, currentPos, Location.Conservatory));
             currentPos.X += conservatoryTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayEleven));
-            Tiles.Add(new ClientBoardTile(MrGreenHomeSquareTex, currentPos, Location.MrGreenHomeSquare, outSide: true, HorizontalHallwayHomeSquare: true));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwayEleven, currentPos, Location.HallwayEleven));
+            Tiles.Add(new ClientBoardTile(mrGreenHomeSquareTex, currentPos, Location.MrGreenHomeSquare, outSide: true, HorizontalHallwayHomeSquare: true));
+            currentPos.X += hallwayEleven.Width;
             Tiles.Add(new ClientBoardTile(ballroomTex, currentPos, Location.Ballroom));
             currentPos.X += ballroomTex.Width;
-            Tiles.Add(new ClientBoardTile(hallwayTexHoriz, currentPos, Location.HallwayTwelve));
-            Tiles.Add(new ClientBoardTile(MissWhiteHomeSquareTex, currentPos, Location.MrsWhiteHomeSquare, outSide: true, HorizontalHallwayHomeSquare: true));
-            currentPos.X += hallwayTexHoriz.Width;
+            Tiles.Add(new ClientBoardTile(hallwayTwelve, currentPos, Location.HallwayTwelve));
+            Tiles.Add(new ClientBoardTile(missWhiteHomeSquareTex, currentPos, Location.MrsWhiteHomeSquare, outSide: true, HorizontalHallwayHomeSquare: true));
+            currentPos.X += hallwayTwelve.Width;
             Tiles.Add(new ClientBoardTile(kitchenTex, currentPos, Location.Kitchen));
             currentPos.X += kitchenTex.Width;
             currentPos.Y += kitchenTex.Height;

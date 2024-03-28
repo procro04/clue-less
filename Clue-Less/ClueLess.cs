@@ -86,6 +86,7 @@ namespace Clue_Less
             if (response.Response == Greet.ServerHeartbeatResponse.CurrentTurn)
             {
                 var player = ClientTokenManager.Instance.ClientPlayers.FirstOrDefault(x => x.PlayerId == response.CurrentTurn.PlayerId);
+                ClientMenuManager.Instance.HandlePlayerTurn(response.CurrentTurn.PlayerId);
                 ClientMenuManager.Instance.ShowNotification($"Currently {player.AssignedToken.Name}'s turn!");
             }
         }

@@ -34,6 +34,7 @@ namespace Managers
         private bool DisplayStartGameButton = false;
         public Queue<string> MessageQueue = new Queue<string>();
         private bool FirstTurnComplete  = false;
+        private int CurrentPlayerTurnId = 0;
 
         public void SetBottomAnchorPosition(System.Numerics.Vector2 bottomAnchorPosition)
         {
@@ -140,28 +141,17 @@ namespace Managers
             }            
         }
 
+        public void HandlePlayerTurn(int playerId)
+        {
+            CurrentPlayerTurnId = playerId;            
+        }
+
         public void DisplayGameMenus()
         {
-            var response = ClientGRPCService.Instance.Heartbeat();
-            if (!FirstTurnComplete)
+            if (ImGui.Button("End Turn"))
             {
-                if (ImGui.Button("End Turn"))
-                {
-                    ClientGRPCService.Instance.AdvancePlayerTurn(response.CurrentTurn.PlayerId);
-                }
+                ClientGRPCService.Instance.AdvancePlayerTurn();
             }
-            //if (ImGui.Button("Test, Move LocalPlayer to Hallway 3"))
-            //{
-            //    ClientTokenManager.Instance.MovePlayer(ClientTokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayThree);
-            //}
-            //if (ImGui.Button("Test, Move LocalPlayer to Hallway 2"))
-            //{
-            //    ClientTokenManager.Instance.MovePlayer(ClientTokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayTwo);
-            //}
-            //if (ImGui.Button("Test, Move LocalPlayer to Hallway 5"))
-            //{
-            //    ClientTokenManager.Instance.MovePlayer(ClientTokenManager.Instance.LoggedInPlayer.PlayerId, Location.HallwayFive);
-            //}
         }
 
         public void ShowNotification(string message)

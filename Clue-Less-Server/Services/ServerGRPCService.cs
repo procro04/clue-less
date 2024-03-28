@@ -15,14 +15,6 @@ namespace Clue_Less_Server.Services
             _logger = logger;
         }
 
-        public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
-        {
-            return Task.FromResult(new HelloReply
-            {
-                Message = "Hello " + request.Name
-            });
-        }
-
         public override Task<PlayerMoveResponse> MovePlayerLocation(PlayerMoveRequest request, ServerCallContext context)
         {
             return Task.FromResult(new PlayerMoveResponse
@@ -79,12 +71,10 @@ namespace Clue_Less_Server.Services
             return Task.FromResult(new Empty());
         }
 
-        public override Task<AdvancePlayerTurnResponse> AdvancePlayerTurn(AdvancePlayerTurnRequest request, ServerCallContext context)
+        public override Task<Empty> AdvancePlayerTurn(Empty request, ServerCallContext context)
         {
-            return Task.FromResult(new AdvancePlayerTurnResponse
-            {
-                CurrentPlayerTurnId = BoardManager.Instance.AdvancePlayerTurn(request.PlayerIdToIncrement)
-            });
+            BoardManager.Instance.AdvancePlayerTurn();
+            return Task.FromResult(new Empty());
         }
     }
 }

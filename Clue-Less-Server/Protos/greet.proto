@@ -13,7 +13,7 @@ service Greeter {
   rpc AttemptLogin (LoginRequest) returns (LoginReply);
   rpc GetSolution(SolutionRequest) returns (SolutionResponse);
   rpc GetPlayerTurnOrder(Empty) returns (PlayerTurnOrderResult);
-  rpc AdvancePlayerTurn(AdvancePlayerTurnRequest) returns (AdvancePlayerTurnResponse);
+  rpc AdvancePlayerTurn(Empty) returns (Empty);
   rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);    
 }
 

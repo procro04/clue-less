@@ -67,9 +67,9 @@ namespace Services
             return new HeartbeatResponse { Response = ServerHeartbeatResponse.NoPendingMessages };
         }
 
-        public AdvancePlayerTurnResponse AdvancePlayerTurn(int currentPlayerIdToIncrement)
+        public void AdvancePlayerTurn()
         {
-            return networkService.AdvancePlayerTurn(new AdvancePlayerTurnRequest { PlayerIdToIncrement = currentPlayerIdToIncrement });
+            networkService.AdvancePlayerTurn(new Empty());
         }
     }
 }

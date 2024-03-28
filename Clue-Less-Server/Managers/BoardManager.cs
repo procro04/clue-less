@@ -14,6 +14,7 @@ namespace Managers
         private Solution Solution = new Solution();
         Random rng = new Random();
         private Dictionary<Location, List<Location>> BoardMap = new Dictionary<Location, List<Location>>();
+        private int CurrentPlayerTurnId = 0;
 
         public BoardManager() {
         }
@@ -37,12 +38,9 @@ namespace Managers
                 startGameResponse.StartGame.PlayerCharacter.Add(player.Character);
             }
             
-            NotificationManager.Instance.SendGlobalMessage(startGameResponse);
-            HeartbeatResponse  currentPlayerTurn = new HeartbeatResponse();
-            currentPlayerTurn.Response = ServerHeartbeatResponse.CurrentTurn;
-            currentPlayerTurn.CurrentTurn = new CurrentTurnResponse();
-            currentPlayerTurn.CurrentTurn.PlayerId = PlayerList.First().PlayerId;
-            NotificationManager.Instance.SendGlobalMessage(currentPlayerTurn);
+            CurrentPlayerTurnId = PlayerList.First().PlayerId;
+            SendCurrentTurnToPlayers();
+            NotificationManager.Instance.SendGlobalMessage(startGameResponse);           
         }
 
         public bool ValidMoveRequest(Player player, Location moveToPosition)
@@ -76,6 +74,176 @@ namespace Managers
             }
         }
 
+        public string FormatLocationNames(Location location)
+        {
+            switch (location)
+            {
+                case Location.Ballroom:
+                    return "Ballroom";
+                case Location.Billiard:
+                    return "Billiard Room";
+                case Location.ConcertHall:
+                    return "Concert Hall";
+                case Location.Conservatory:
+                    return "Conservatory";
+                case Location.DiningRoom:
+                    return "Dining Room";
+                case Location.Kitchen:
+                    return "Kitchen";
+                case Location.Library:
+                    return "Library";
+                case Location.Lounge:
+                    return "Lounge";
+                case Location.Study:
+                    return "Study";
+            }
+            return "";
+        }
+
+        public List<Location> GetValidMoveLocations(Player player)
+        {
+            var locationsToDelete = new List<Location>();
+            var validPlayerLocations = BoardMap.FirstOrDefault(x => x.Key == player.PlayerLocation);
+
+            foreach (var possibleLocation in validPlayerLocations.Value)
+            {
+                if (IsHallway(possibleLocation))
+                {
+                    if (IsOccupied(possibleLocation))
+                    {
+                        locationsToDelete.Add(possibleLocation);
+                    }
+                }
+            }
+
+            if (locationsToDelete.Count > 0)
+            {
+                foreach (var possibleLocation in locationsToDelete)
+                {
+                    validPlayerLocations.Value.Remove(possibleLocation);
+                }
+            }
+
+            if (validPlayerLocations.Value.Count == 0)
+            {
+                HeartbeatResponse invalidMoveResponse = new HeartbeatResponse();
+                invalidMoveResponse.Response = ServerHeartbeatResponse.Error;
+                invalidMoveResponse.ErrorMessage = new ErrorMessageResponse();
+                invalidMoveResponse.ErrorMessage.Message = "There is nowhere for you to move at this time.";
+                NotificationManager.Instance.SendPlayerMessage(player.PlayerId, invalidMoveResponse);
+            }
+
+            return validPlayerLocations.Value;
+        }
+
+        public bool CheckPlayerCards(int playerId, Card playerCardToCheck)
+        {
+            var player = PlayerList.FirstOrDefault(x => x.PlayerId == playerId);
+            if (player != null)
+            {
+                return player.CardsInHand.Contains(playerCardToCheck);
+            }
+            return false;
+        }
+
+        public List<int> GetPlayerTurnOrder()
+        {
+            List<int> result = new List<int>();
+            foreach (Player player in PlayerList)
+            {
+                result.Add(player.PlayerId);
+            }
+            return result;
+        }
+
+        public LoginReply AttemptLogin(string playerName, PlayerCharacterOptions character)
+        {
+            var LoginResult = new LoginReply
+            {
+                Success = true
+            };
+
+            foreach (var player in PlayerList)
+            {
+                if (player.Character == character)
+                {
+                    LoginResult.Success = false;
+                }
+            }
+            if (LoginResult.Success)
+            {
+                var newPlayer = new Player(playerName, PlayerIdCounter++, character);
+                LoginResult.PlayerId = newPlayer.PlayerId;
+                PlayerList.Add(newPlayer);
+            }
+            return LoginResult;
+        }
+
+        public void AdvancePlayerTurn()
+        {
+            CurrentPlayerTurnId++;
+
+            if (CurrentPlayerTurnId > PlayerList.Count)
+            {
+                CurrentPlayerTurnId = 1;
+            }
+
+            SendCurrentTurnToPlayers();
+        }
+
+        public SolutionResponse GetSolution(int requestingPlayerId, MurderRoomsEnum suspectedLocation, PlayerCharacterOptions suspectedCharacter, WeaponTokenEnum suspectedWeapon)
+        {
+            var result = new SolutionResponse();
+            result.Correct = true;
+            HeartbeatResponse solutionResponse = new HeartbeatResponse();
+            solutionResponse.Response = ServerHeartbeatResponse.Error;
+            solutionResponse.ErrorMessage = new ErrorMessageResponse();
+
+            if (solutionResponse.CurrentTurn.PlayerId != requestingPlayerId)
+            {
+                solutionResponse.ErrorMessage.Message = "It is not currently your turn, therefore you cannot make an accusation.";
+                result.Correct = false;
+                return result;
+            }
+
+            var player = PlayerList.First(x => x.PlayerId == requestingPlayerId);
+            if (player.HasMadeAccusation)
+            {
+                solutionResponse.ErrorMessage.Message = "You have already made an accusation - you can only make one accusation per game.";
+                result.Correct = false;
+                return result;
+            }
+
+            if (Solution.MurderWeapon != suspectedWeapon)
+            {
+                result.Correct = false;
+            }
+            if (Solution.Murderer != suspectedCharacter)
+            {
+                result.Correct = false;
+            }
+            if (Solution.MurderRoom != suspectedLocation)
+            {
+                result.Correct = false;
+            }
+
+            if (!result.Correct)
+            {
+                solutionResponse.ErrorMessage.Message = "Sorry, you have made an incorrect accusation. \n " +
+                    $"The murderer is {result.Murderer} in  the {result.MurderRoom} with the {result.MurderWeapon}. " +
+                    "You will not be able to make any more accusations for the remainder of this game.";
+            }
+            else
+            {
+                solutionResponse.ErrorMessage.Message = "Congratulations! You solved the mystery!";
+            }
+
+            NotificationManager.Instance.SendPlayerMessage(requestingPlayerId, solutionResponse);
+            return result;
+        }
+
+
+        #region --------------------- Private Methods ------------------------
         private void MovePlayersToStartingPositions()
         {
             foreach (var player in PlayerList)
@@ -132,32 +300,22 @@ namespace Managers
             }
         }
 
-        public List<Location> GetValidMoveLocations(Player player)
+        private void SendCurrentTurnToPlayers()
         {
-            var locationsToDelete = new List<Location>();
-            var validPlayerLocations = BoardMap.FirstOrDefault(x => x.Key == player.PlayerLocation);
+            HeartbeatResponse currentPlayerTurn = new HeartbeatResponse();
+            currentPlayerTurn.Response = ServerHeartbeatResponse.CurrentTurn;
+            currentPlayerTurn.CurrentTurn = new CurrentTurnResponse();
+            currentPlayerTurn.CurrentTurn.PlayerId = CurrentPlayerTurnId;
+            NotificationManager.Instance.SendGlobalMessage(currentPlayerTurn);
+        }
 
-            foreach (var possibleLocation in validPlayerLocations.Value)
-            {
-                if (IsHallway(possibleLocation))
-                {
-                    if (IsOccupied(possibleLocation))
-                    {
-                        locationsToDelete.Add(possibleLocation);
-                    }
-                }
-            }
-
-            if (locationsToDelete.Count > 0)
-            {
-                foreach (var possibleLocation in locationsToDelete)
-                {
-                    validPlayerLocations.Value.Remove(possibleLocation);
-                }
-            }
-
-            return validPlayerLocations.Value;
-        }        
+        private void GenerateSolution()
+        {
+            Solution = new Solution();
+            Solution.Murderer = (PlayerCharacterOptions)rng.Next(0, Enum.GetNames(typeof(PlayerCharacterOptions)).Length);
+            Solution.MurderWeapon = (WeaponTokenEnum)rng.Next(0, Enum.GetNames(typeof(WeaponTokenEnum)).Length);
+            Solution.MurderRoom = (MurderRoomsEnum)rng.Next(0, Enum.GetNames(typeof(MurderRoomsEnum)).Length);
+        }
 
         private List<Card> InitializeCardsToDeal()
         {
@@ -170,7 +328,7 @@ namespace Managers
                 if (character != Solution.Murderer)
                 {
                     cards.Add(newCard);
-                }                
+                }
             }
             foreach (WeaponTokenEnum weapon in Enum.GetValues(typeof(WeaponTokenEnum)))
             {
@@ -191,123 +349,9 @@ namespace Managers
                 {
                     cards.Add(newCard);
                 }
-            }            
+            }
             var shuffledCards = cards.OrderBy(_ => rng.Next()).ToList();
             return shuffledCards;
-        }
-
-        public bool CheckPlayerCards(int playerId, Card playerCardToCheck)
-        {
-            var player = PlayerList.FirstOrDefault(x => x.PlayerId == playerId);
-            if (player != null)
-            {
-                return player.CardsInHand.Contains(playerCardToCheck);
-            }
-            return false;
-        }
-
-        public List<int> GetPlayerTurnOrder()
-        {
-            List<int> result = new List<int>();
-            foreach (Player player in PlayerList)
-            {
-                result.Add(player.PlayerId);
-            }
-            return result;
-        }
-
-        public LoginReply AttemptLogin(string playerName, PlayerCharacterOptions character)
-        {
-            var LoginResult = new LoginReply
-            {
-                Success = true
-            };
-
-            foreach (var player in PlayerList)
-            {
-                if (player.Character == character)
-                {
-                    LoginResult.Success = false;
-                }
-            }
-            if (LoginResult.Success)
-            {
-                var newPlayer = new Player(playerName, PlayerIdCounter++, character);
-                LoginResult.PlayerId = newPlayer.PlayerId;
-                PlayerList.Add(newPlayer);                
-            }
-            return LoginResult;
-        }
-
-        public int AdvancePlayerTurn(int playerIdToIncrement)
-        {
-            if (playerIdToIncrement == PlayerList.Count)
-            {
-                return 1;
-            }
-            else
-            {
-                return playerIdToIncrement++;
-            }
-        }
-
-        private void GenerateSolution()
-        {
-            Solution = new Solution();
-            Solution.Murderer = (PlayerCharacterOptions)rng.Next(0, Enum.GetNames(typeof(PlayerCharacterOptions)).Length);
-            Solution.MurderWeapon = (WeaponTokenEnum)rng.Next(0, Enum.GetNames(typeof(WeaponTokenEnum)).Length);
-            Solution.MurderRoom = (MurderRoomsEnum)rng.Next(0, Enum.GetNames(typeof(MurderRoomsEnum)).Length);
-        }
-
-        public SolutionResponse GetSolution(int requestingPlayerId, MurderRoomsEnum suspectedLocation, PlayerCharacterOptions suspectedCharacter, WeaponTokenEnum suspectedWeapon)
-        {
-            var result = new SolutionResponse();
-            result.Correct = true;
-            HeartbeatResponse solutionResponse = new HeartbeatResponse();
-            solutionResponse.Response = ServerHeartbeatResponse.Error;
-            solutionResponse.ErrorMessage = new ErrorMessageResponse();
-
-            if (solutionResponse.CurrentTurn.PlayerId != requestingPlayerId)
-            {
-                solutionResponse.ErrorMessage.Message = "It is not currently your turn, therefore you cannot make an accusation.";
-                result.Correct = false;
-                return result;
-            }
-
-            var player = PlayerList.First(x => x.PlayerId == requestingPlayerId);
-            if (player.HasMadeAccusation)
-            {
-                solutionResponse.ErrorMessage.Message = "You have already made an accusation - you can only make one accusation per game.";
-                result.Correct = false;
-                return result;
-            }           
-
-            if (Solution.MurderWeapon != suspectedWeapon)
-            {
-                result.Correct = false;
-            }
-            if (Solution.Murderer != suspectedCharacter)
-            {
-                result.Correct = false;
-            }
-            if (Solution.MurderRoom != suspectedLocation)
-            {
-                result.Correct = false;
-            }
-
-            if (!result.Correct)
-            {
-                solutionResponse.ErrorMessage.Message = "Sorry, you have made an incorrect accusation. \n " +
-                    $"The murderer is {result.Murderer} in  the {result.MurderRoom} with the {result.MurderWeapon}. " +
-                    "You will not be able to make any more accusations for the remainder of this game.";
-            }
-            else
-            {
-                solutionResponse.ErrorMessage.Message = "Congratulations! You solved the mystery!";
-            }
-
-            NotificationManager.Instance.SendPlayerMessage(requestingPlayerId, solutionResponse);
-            return result;
         }
 
         private bool IsHallway(Location location)
@@ -514,5 +558,6 @@ namespace Managers
 
             return locations;
         }
+        #endregion
     }
 }
